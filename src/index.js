@@ -1,12 +1,16 @@
-import _ from 'lodash';
-
-function component() {
-    const element = document.createElement('div');
-  
-    // Lodash, now imported by this script
-    element.innerHTML = _.join(['Hello', 'webpack'], ' ');
-  
-    return element;
+const ship = (length) => {
+  return {
+    length:length,
+    hits: 0,
+    sunk:false,
+    hit: function() {
+      this.hits++;
+      if (this.hits >= this.length) this.sunk = true
+    },
+    isSunk: function() {
+      return this.sunk
+    }
   }
-  
-  document.body.appendChild(component());
+}
+
+module.exports = ship
