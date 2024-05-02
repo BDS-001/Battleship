@@ -1,4 +1,4 @@
-const ship = require('./index'); 
+const { ship, gameBoard } = require('./index');
 
 describe('ship', () => {
     test('ship should not be sunk initially', () => {
@@ -27,3 +27,17 @@ describe('ship', () => {
       expect(myShip.isSunk()).toBe(false);
     });
   });
+
+  describe('gameBoard', () => {
+    test('game board has 10 rows', () => {
+      const myBoard = gameBoard();
+      expect(myBoard.board.length).toBe(10);
+    });
+
+    test('each game board row has 10 columns', () => {
+      const myBoard = gameBoard();
+      myBoard.board.forEach(row => {
+        expect(row.length).toBe(10);
+      });
+    });
+  })

@@ -13,4 +13,17 @@ const ship = (length) => {
   }
 }
 
-module.exports = ship
+const gameBoard = () => {
+  const createGameboard = () => {
+    return Array.from({ length: 10 }, () => Array.from({ length: 10 }, () => null));
+  }
+
+  const placeShip = (ship, coordinates) => {
+    
+  }
+
+  const board = createGameboard()
+  return {board}
+}
+
+module.exports = {ship, gameBoard}
