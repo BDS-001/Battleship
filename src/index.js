@@ -17,13 +17,17 @@ const gameBoard = () => {
   const createGameboard = () => {
     return Array.from({ length: 10 }, () => Array.from({ length: 10 }, () => null));
   }
+  const board = createGameboard()
 
   const placeShip = (ship, coordinates) => {
-    
-  }
+    coordinates.forEach(location => {
+      const row = location[0]
+      const col = location[1]
 
-  const board = createGameboard()
-  return {board}
+      board[row][col] = ship
+    });
+  }
+  return {board, placeShip}
 }
 
 module.exports = {ship, gameBoard}
