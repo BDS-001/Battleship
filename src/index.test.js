@@ -45,8 +45,8 @@ describe('ship', () => {
       const myBoard = gameBoard();
       const myShip = ship(2)
       myBoard.placeShip(myShip, [[4,6], [4,5]])
-      expect(myBoard.board[4][6]).toBe(myShip)
-      expect(myBoard.board[4][5]).toBe(myShip)
-      expect(myBoard.board[4][7]).toBe(null)
+      expect(myBoard.board[4][6].ship).toBe(myShip)
+      expect(myBoard.board[4][5].ship).toBe(myShip)
+      expect(myBoard.board[4][7].ship).toBe(null)
     });
   })

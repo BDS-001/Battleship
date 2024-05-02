@@ -15,7 +15,8 @@ const ship = (length) => {
 
 const gameBoard = () => {
   const createGameboard = () => {
-    return Array.from({ length: 10 }, () => Array.from({ length: 10 }, () => null));
+    return Array.from({ length: 10 }, () => Array.from({ length: 10 }, () => ({ ship: null, hit: null })));
+
   }
   const board = createGameboard()
 
@@ -24,7 +25,7 @@ const gameBoard = () => {
       const row = location[0]
       const col = location[1]
 
-      board[row][col] = ship
+      board[row][col].ship = ship
     });
   }
   return {board, placeShip}
