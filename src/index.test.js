@@ -49,4 +49,12 @@ describe('ship', () => {
       expect(myBoard.board[4][5].ship).toBe(myShip)
       expect(myBoard.board[4][7].ship).toBe(null)
     });
+
+    test('cannot place a ship where a ship already exists', () => {
+      const myBoard = gameBoard();
+      const myShip = ship(2)
+      const otherShip = ship(2)
+      myBoard.placeShip(myShip, [[4,6], [4,5]])
+      expect(myBoard.placeShip(otherShip, [[3,6], [4,6]])).toBe('Ship already exists')
+    });
   })

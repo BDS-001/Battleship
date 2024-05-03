@@ -20,14 +20,33 @@ const gameBoard = () => {
   }
   const board = createGameboard()
 
-  const placeShip = (ship, coordinates) => {
-    coordinates.forEach(location => {
-      const row = location[0]
-      const col = location[1]
-
-      board[row][col].ship = ship
-    });
+  const validCoordinates = (coordinates) => {
+    for (let location of coordinates) {
+      const row = location[0];
+      const col = location[1];
+  
+      if (board[row][col].ship !== null) {
+        return 'Ship already exists';
+      }
+    }
+    return true
   }
+
+  const placeShip = (ship, coordinates) => {
+    const checkResponse = validCoordinates(coordinates)
+    if (checkResponse === true) {
+      coordinates.forEach(location => {
+        const row = location[0]
+        const col = location[1]
+        
+        board[row][col].ship = ship
+      });
+    }
+    else {
+      return checkResponse
+    }
+  }
+
   return {board, placeShip}
 }
 
