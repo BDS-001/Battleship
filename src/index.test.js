@@ -57,4 +57,10 @@ describe('ship', () => {
       myBoard.placeShip(myShip, [[4,6], [4,5]])
       expect(myBoard.placeShip(otherShip, [[3,6], [4,6]])).toBe('Ship already exists')
     });
+
+    test('cannot place a ship outside of the gameBoard', () => {
+      const myBoard = gameBoard();
+      const myShip = ship(2)
+      expect(myBoard.placeShip(myShip, [[9,9], [9,10]])).toBe('coordinates out of range')
+    });
   })

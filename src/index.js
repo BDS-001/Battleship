@@ -24,10 +24,9 @@ const gameBoard = () => {
     for (let location of coordinates) {
       const row = location[0];
       const col = location[1];
-  
-      if (board[row][col].ship !== null) {
-        return 'Ship already exists';
-      }
+      
+      if (row >= 10 || col >= 10 || row < 0 || col < 0) return 'coordinates out of range'
+      if (board[row][col].ship !== null) return 'Ship already exists';
     }
     return true
   }
