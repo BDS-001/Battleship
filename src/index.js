@@ -19,6 +19,7 @@ const gameBoard = () => {
 
   }
   const board = createGameboard()
+  const ships = []
 
   const validCoordinates = (coordinates) => {
     for (let location of coordinates) {
@@ -40,6 +41,7 @@ const gameBoard = () => {
         
         board[row][col].ship = ship
       });
+      ships.push(ship)
     }
     else {
       return checkResponse
@@ -57,7 +59,11 @@ const gameBoard = () => {
     }
   }
 
-  return {board, placeShip, receiveAttack}
+  const allShipsSunk = () => {
+    return ships.every(ship => ship.sunk)
+  }
+
+  return {board, placeShip, receiveAttack, allShipsSunk}
 }
 
 module.exports = {ship, gameBoard}
