@@ -1,4 +1,4 @@
-const { ship, gameBoard } = require('./index');
+const { ship, gameBoard, player } = require('./index');
 
 describe('ship', () => {
 
@@ -116,3 +116,21 @@ describe('ship', () => {
       expect(myBoard.allShipsSunk()).toBe(true);
     });
   })
+
+  describe('player', () => {
+    
+    let testPlayer;
+    beforeEach(() => { 
+      testPlayer = player();
+    });
+  
+    test('should initialize with a gameBoard', () => {
+      expect(testPlayer.board).toBeDefined();
+    });
+  
+    test('should have a gameBoard with necessary methods', () => {
+      expect(typeof testPlayer.board.placeShip).toBe('function');
+      expect(typeof testPlayer.board.receiveAttack).toBe('function');
+      expect(typeof testPlayer.board.allShipsSunk).toBe('function');
+    });
+  }); 

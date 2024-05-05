@@ -66,4 +66,9 @@ const gameBoard = () => {
   return {board, placeShip, receiveAttack, allShipsSunk}
 }
 
-module.exports = {ship, gameBoard}
+const player = () => {
+  const board = gameBoard()
+  return {board}
+}
+
+module.exports = {ship, gameBoard, player}
