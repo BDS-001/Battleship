@@ -46,7 +46,18 @@ const gameBoard = () => {
     }
   }
 
-  return {board, placeShip}
+  const receiveAttack = (coordinates) => {
+    const location = board[coordinates[0]][coordinates[1]]
+    if (location.hit != null) return 'coordinates already selected'
+    if (location.ship) {
+      location.hit = true
+      location.ship.hit()
+    } else {
+      location.hit = false
+    }
+  }
+
+  return {board, placeShip, receiveAttack}
 }
 
 module.exports = {ship, gameBoard}

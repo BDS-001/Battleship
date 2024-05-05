@@ -63,4 +63,29 @@ describe('ship', () => {
       const myShip = ship(2)
       expect(myBoard.placeShip(myShip, [[9,9], [9,10]])).toBe('coordinates out of range')
     });
+
+    test('miss updates the coordinate to miss', () => {
+      const myBoard = gameBoard();
+      const myShip = ship(2)
+      myBoard.placeShip(myShip, [[4,6], [4,5]])
+      myBoard.receiveAttack([0, 0])
+      expect(myBoard.board[0][0].hit).toBe(false)
+    });
+
+    test('recieveAttack correctly hits the ship', () => {
+      const myBoard = gameBoard();
+      const myShip = ship(2)
+      myBoard.placeShip(myShip, [[4,6], [4,5]])
+      myBoard.receiveAttack([4, 6])
+      expect(myBoard.board[4][6].hit).toBe(true)
+      expect(myShip.hits).toBe(1)
+    });
+
+    test('recieveAttack correctly hits the ship', () => {
+      const myBoard = gameBoard();
+      const myShip = ship(2)
+      myBoard.placeShip(myShip, [[4,6], [4,5]])
+      myBoard.receiveAttack([4, 6])
+      expect(myBoard.receiveAttack([4, 6])).toBe('coordinates already selected')
+    });
   })
