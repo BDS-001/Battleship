@@ -1,19 +1,24 @@
 const { ship, gameBoard } = require('./index');
 
 describe('ship', () => {
+
+    let myShip;
+    beforeEach(() => {
+      // Create a new ship for each test
+      myShip = ship(3);
+    });
+
+  
     test('ship should not be sunk initially', () => {
-      const myShip = ship(3);
       expect(myShip.isSunk()).toBe(false);
     });
   
     test('hits are incremented on hit', () => {
-      const myShip = ship(3);
       myShip.hit();
       expect(myShip.hits).toBe(1);
     });
   
     test('ship sinks after sufficient hits', () => {
-      const myShip = ship(3);
       myShip.hit();
       myShip.hit();
       myShip.hit();
@@ -21,7 +26,6 @@ describe('ship', () => {
     });
   
     test('ship does not sink before sufficient hits', () => {
-      const myShip = ship(3);
       myShip.hit();
       myShip.hit();
       expect(myShip.isSunk()).toBe(false);
