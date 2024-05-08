@@ -16,8 +16,8 @@ const webpage = (() => {
         for (let i = 0; i < 100; i++) {
             const cell = document.createElement('div');
             cell.className = 'grid-cell';
-            cell.style.width = '30px';  // Set the width of each cell
-            cell.style.height = '30px';  // Set the height of each cell
+            cell.style.width = '1fr';  // Set the width of each cell
+            cell.style.height = '1fr';  // Set the height of each cell
             cell.style.border = '1px solid black';
             board.appendChild(cell);
         }
