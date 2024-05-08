@@ -1,14 +1,15 @@
 const { ship, gameBoard, player } = require('./index');
 
 const webpage = (() => {
-    const player1 = player()
-    const player2 = player()
+    const player1 = player('foo')
+    const player2 = player('bar')
 
-    const createBoard = () => {
+    const createBoard = (player) => {
         // Create the main board div
         const board = document.createElement('div');
-        board.id = 'board';
+        board.className = 'board';
         board.style.display = 'grid';
+        board.dataset.player = player.name
         board.style.gridTemplateColumns = 'repeat(10, 30px)';  // Sets the layout to 10 columns
         board.style.gridTemplateRows = 'repeat(10, 30px)';     // Sets the layout to 10 rows
 
@@ -26,8 +27,6 @@ const webpage = (() => {
             }
             cell.dataset.location = JSON.stringify(location);
             cell.className = 'grid-cell';
-            cell.style.width = '1fr';  // Set the width of each cell
-            cell.style.height = '1fr';  // Set the height of each cell
             cell.style.border = '1px solid black';
             board.appendChild(cell);
         }
@@ -36,6 +35,6 @@ const webpage = (() => {
         document.body.appendChild(board);
     }
 
-    createBoard()
-    createBoard()
+    createBoard(player1)
+    createBoard(player2)
 })();

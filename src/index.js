@@ -66,9 +66,10 @@ const gameBoard = () => {
   return {board, placeShip, receiveAttack, allShipsSunk}
 }
 
-const player = () => {
+const player = (playerName) => {
   const board = gameBoard()
-  return {board}
+  const name = playerName
+  return {board, name}
 }
 
 module.exports = {ship, gameBoard, player}
