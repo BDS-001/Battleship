@@ -9,9 +9,9 @@ const webpage = (() => {
         const board = document.createElement('div');
         board.className = 'board';
         board.style.display = 'grid';
-        board.dataset.player = player.name
-        board.style.gridTemplateColumns = 'repeat(10, 30px)';  // Sets the layout to 10 columns
-        board.style.gridTemplateRows = 'repeat(10, 30px)';     // Sets the layout to 10 rows
+        board.id = player.name
+        board.style.gridTemplateColumns = 'repeat(10, 40px)';  // Sets the layout to 10 columns
+        board.style.gridTemplateRows = 'repeat(10, 40px)';     // Sets the layout to 10 rows
 
         // Loop to create each cell in the grid
         let row = 0
@@ -35,6 +35,25 @@ const webpage = (() => {
         document.body.appendChild(board);
     }
 
+    const updateBoard = (player) => {
+        const board = document.querySelector(`#${player.name}`)
+        const cells = board.querySelectorAll('.grid-cell')
+        console.log(cells)
+        for (let row = 0; row <= 9; row++) {
+            for (let col = 0; col <= 9; col++) {
+                console.log((row * 10) + col)
+                if (player.board.board[row][col].ship) cells[(row * 10) + col].innerHTML = 1
+                
+            }
+            
+        }
+    }
+
     createBoard(player1)
     createBoard(player2)
+
+    //test
+    player1.board.placeShip(ship(3), [[0, 0], [0, 1], [0, 2]]);
+    player1.board.placeShip(ship(2), [[1, 0], [1, 1]]);
+    updateBoard(player1)
 })();
