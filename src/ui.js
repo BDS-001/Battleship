@@ -35,18 +35,38 @@ const webpage = (() => {
         document.body.appendChild(board);
     }
 
-    const updateBoard = (player) => {
+    const getPlayerBoard = (player) => {
         const board = document.querySelector(`#${player.name}`)
-        const cells = board.querySelectorAll('.grid-cell')
-        console.log(cells)
+        return board.querySelectorAll('.grid-cell')
+    }
+    const updateBoard = (player) => {
+        const board = getPlayerBoard(player)
         for (let row = 0; row <= 9; row++) {
             for (let col = 0; col <= 9; col++) {
-                console.log((row * 10) + col)
-                if (player.board.board[row][col].ship) cells[(row * 10) + col].innerHTML = 1
+                if (player.board.board[row][col].ship) board[(row * 10) + col].innerHTML = 1
                 
             }
             
         }
+    }
+
+    const updateCell = (player) => {
+
+    }
+
+    const cellSelect = (event) => {
+        if (event.target.matches('.grid-cell')) {
+            const location = JSON.parse(event.target.dataset.location)
+            console.log(location)
+        }
+    }
+
+    const enableListener = () => {
+        document.addEventListener('click', cellSelect)
+    }
+
+    const disableListener = () => {
+        document.addEventListener('click', cellSelect)
     }
 
     createBoard(player1)
@@ -56,4 +76,5 @@ const webpage = (() => {
     player1.board.placeShip(ship(3), [[0, 0], [0, 1], [0, 2]]);
     player1.board.placeShip(ship(2), [[1, 0], [1, 1]]);
     updateBoard(player1)
+    enableListener()
 })();
