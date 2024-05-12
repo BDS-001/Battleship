@@ -4,6 +4,8 @@ const webpage = (() => {
     const player1 = player('foo')
     const player2 = player('bar')
 
+    const currentPlayer = player1
+
     const createBoard = (player) => {
         // Create the main board div
         const board = document.createElement('div');
@@ -50,14 +52,17 @@ const webpage = (() => {
         }
     }
 
-    const updateCell = (player) => {
-
+    const updateCell = (player, location, cell) => {
+        const result = player.board.receiveAttack(location)
+        if (result != 'coordinates already selected') {
+            cell.innerHTML = result
+        }
     }
 
     const cellSelect = (event) => {
         if (event.target.matches('.grid-cell')) {
             const location = JSON.parse(event.target.dataset.location)
-            console.log(location)
+            updateCell(currentPlayer, location, event.target)
         }
     }
 

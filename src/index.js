@@ -57,6 +57,7 @@ const gameBoard = () => {
     } else {
       location.hit = false
     }
+    return location.hit
   }
 
   const allShipsSunk = () => {
