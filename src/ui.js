@@ -1,20 +1,5 @@
 const { ship, gameBoard, player } = require('./index');
 
-const gameState = (() => {
-    const player1 = player('player1')
-    const player2 = player('player2')
-
-    const currentPlayer = player1
-
-    const updatePlayer = (player, location) => {
-        return player.board.receiveAttack(location)
-    }
-
-    return {player1, player2, currentPlayer, updatePlayer}
-})();
-
-console.log(gameState.player1)
-
 const webpage = (() => {
     const createBoard = (player) => {
         // Create the main board div
@@ -48,17 +33,17 @@ const webpage = (() => {
     }
 
     const getPlayerBoard = (player) => {
-        const board = document.querySelector(`#${player.name}`)
-        return board.querySelectorAll('.grid-cell')
+        return document.querySelector(`#${player.name}`)
+
     }
+
     const updateBoard = (player) => {
-        const board = getPlayerBoard(player)
+        let board = getPlayerBoard(player)
+        board = board.querySelectorAll('.grid-cell')
         for (let row = 0; row <= 9; row++) {
             for (let col = 0; col <= 9; col++) {
                 if (player.board.board[row][col].ship) board[(row * 10) + col].innerHTML = 1
-                
             }
-            
         }
     }
 
@@ -72,23 +57,47 @@ const webpage = (() => {
         }
     }
 
-    const enableListener = (board) => {
-        board.addEventListener('click', cellSelect)
+    const enableListener = (player) => {
+        console.log(getPlayerBoard(player))
+        getPlayerBoard(player).addEventListener('click', cellSelect)
     }
 
-    const disableListener = (board) => {
-        board.removeEventListener('click', cellSelect)
+    const disableListener = (player) => {
+        getPlayerBoard(player).removeEventListener('click', cellSelect)
     }
 
-    createBoard(gameState.player1)
-    createBoard(gameState.player2)
-
-    return {updateBoard, enableListener}
+    return {createBoard, updateBoard, enableListener, disableListener}
 })();
 
+const gameState = (() => {
+    const player1 = player('player1')
+    const player2 = player('player2')
+
+    let currentPlayer = player1
+
+    const changeTurn = () => {
+        webpage.disableListener(currentPlayer)
+        currentPlayer === player1 ? currentPlayer = player2 : currentPlayer = player1
+        webpage.enableListener(currentPlayer)
+    }
+
+    const updatePlayer = (player, location) => {
+        const res = player.board.receiveAttack(location)
+        if (res != 'coordinates already selected') {
+            changeTurn()
+        }
+        return res
+    }
+
+    return {player1, player2, currentPlayer, updatePlayer}
+})();
 
 //test
+webpage.createBoard(gameState.player1);
+webpage.createBoard(gameState.player2);
+webpage.enableListener(gameState.currentPlayer);
 gameState.player1.board.placeShip(ship(3), [[0, 0], [0, 1], [0, 2]]);
 gameState.player1.board.placeShip(ship(2), [[1, 0], [1, 1]]);
+gameState.player2.board.placeShip(ship(5), [[4, 3], [5, 3], [6, 3], [7, 3], [8, 3]]);
 webpage.updateBoard(gameState.player1)
-webpage.enableListener(document.querySelector('#player1'))
+webpage.updateBoard(gameState.player2)
