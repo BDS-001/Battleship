@@ -42,7 +42,7 @@ const webpage = (() => {
         board = board.querySelectorAll('.grid-cell')
         for (let row = 0; row <= 9; row++) {
             for (let col = 0; col <= 9; col++) {
-                if (player.board.board[row][col].ship) board[(row * 10) + col].innerHTML = 1
+                if (player.board.board[row][col].ship) board[(row * 10) + col].innerHTML = 's'
             }
         }
     }
@@ -52,7 +52,7 @@ const webpage = (() => {
             const location = JSON.parse(event.target.dataset.location)
             const result = gameState.updatePlayer(gameState.getOpponent(), location)
             if (result != 'coordinates already selected') {
-                event.target.innerHTML = result
+                event.target.style.backgroundColor = result ? 'green' : 'red' 
             }
         }
     }

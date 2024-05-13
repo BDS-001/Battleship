@@ -14,3 +14,7 @@ body {
     grid-template-columns: repeat(10, 1fr);
     border: 1px solid black;
 }
+
+.grid-cell:hover {
+  cursor: pointer;
+}
