@@ -50,7 +50,7 @@ const webpage = (() => {
     const cellSelect = (event) => {
         if (event.target.matches('.grid-cell')) {
             const location = JSON.parse(event.target.dataset.location)
-            const result = gameState.updatePlayer(gameState.currentPlayer, location)
+            const result = gameState.updatePlayer(gameState.getOpponent(), location)
             if (result != 'coordinates already selected') {
                 event.target.innerHTML = result
             }
@@ -58,7 +58,6 @@ const webpage = (() => {
     }
 
     const enableListener = (player) => {
-        console.log(getPlayerBoard(player))
         getPlayerBoard(player).addEventListener('click', cellSelect)
     }
 
@@ -73,15 +72,21 @@ const gameState = (() => {
     const player1 = player('player1')
     const player2 = player('player2')
 
-    let currentPlayer = player1
+    let currentOpponent = player2
+
+    const getOpponent = () => {
+        return currentOpponent
+    }
 
     const changeTurn = () => {
-        webpage.disableListener(currentPlayer)
-        currentPlayer === player1 ? currentPlayer = player2 : currentPlayer = player1
-        webpage.enableListener(currentPlayer)
+        webpage.disableListener(currentOpponent)
+        currentOpponent === player1 ? currentOpponent = player2 : currentOpponent = player1
+        webpage.enableListener(currentOpponent)
     }
 
     const updatePlayer = (player, location) => {
+        console.log(player)
+        console.log(currentOpponent)
         const res = player.board.receiveAttack(location)
         if (res != 'coordinates already selected') {
             changeTurn()
@@ -89,13 +94,13 @@ const gameState = (() => {
         return res
     }
 
-    return {player1, player2, currentPlayer, updatePlayer}
+    return {player1, player2, updatePlayer, getOpponent}
 })();
 
 //test
 webpage.createBoard(gameState.player1);
 webpage.createBoard(gameState.player2);
-webpage.enableListener(gameState.currentPlayer);
+webpage.enableListener(gameState.getOpponent());
 gameState.player1.board.placeShip(ship(3), [[0, 0], [0, 1], [0, 2]]);
 gameState.player1.board.placeShip(ship(2), [[1, 0], [1, 1]]);
 gameState.player2.board.placeShip(ship(5), [[4, 3], [5, 3], [6, 3], [7, 3], [8, 3]]);
