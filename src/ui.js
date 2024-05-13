@@ -1,5 +1,6 @@
 const { ship, gameBoard, player } = require('./index');
 
+//controls webpage elements
 const webpage = (() => {
     const createBoard = (player) => {
         // Create the main board div
@@ -32,11 +33,10 @@ const webpage = (() => {
         document.body.appendChild(board);
     }
 
-    const getPlayerBoard = (player) => {
-        return document.querySelector(`#${player.name}`)
+    //return the ui board when given a palyer
+    const getPlayerBoard = (player) => document.querySelector(`#${player.name}`)
 
-    }
-
+    //update the entire board when given a player
     const updateBoard = (player) => {
         let board = getPlayerBoard(player)
         board = board.querySelectorAll('.grid-cell')
@@ -47,6 +47,7 @@ const webpage = (() => {
         }
     }
 
+    //when the cell is selected get the coordiantes and update the action
     const cellSelect = (event) => {
         if (event.target.matches('.grid-cell')) {
             const location = JSON.parse(event.target.dataset.location)
@@ -57,21 +58,25 @@ const webpage = (() => {
         }
     }
 
+    //enable and disable cells from being clicked
     const enableListener = (player) => getPlayerBoard(player).addEventListener('click', cellSelect)
     const disableListener = (player) => getPlayerBoard(player).removeEventListener('click', cellSelect)
 
     return {createBoard, updateBoard, enableListener, disableListener}
 })();
 
+//runs the battleship game
 const gameState = (() => {
+    //initialize the players and starting state of the game
     const player1 = player('player1')
     const player2 = player('player2')
-
     let currentPlayer = player1
     let currentOpponent = player2
 
+    //returns the currentOpponent
     const getOpponent = () => currentOpponent
 
+    //update the currentPlayer and currentOpponent
     const changeTurn = () => {
         webpage.disableListener(currentOpponent)
         currentPlayer === player1 ? currentPlayer = player2 : currentPlayer = player1
@@ -79,6 +84,7 @@ const gameState = (() => {
         webpage.enableListener(currentOpponent)
     }
 
+    //recieve and attack and returns the result of the selected coordinates
     const updatePlayer = (player, location) => {
         const res = player.board.receiveAttack(location)
         if (res != 'coordinates already selected') {
