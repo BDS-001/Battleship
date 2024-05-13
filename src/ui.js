@@ -67,12 +67,14 @@ const gameState = (() => {
     const player1 = player('player1')
     const player2 = player('player2')
 
+    let currentPlayer = player1
     let currentOpponent = player2
 
     const getOpponent = () => currentOpponent
 
     const changeTurn = () => {
         webpage.disableListener(currentOpponent)
+        currentPlayer === player1 ? currentPlayer = player2 : currentPlayer = player1
         currentOpponent === player1 ? currentOpponent = player2 : currentOpponent = player1
         webpage.enableListener(currentOpponent)
     }
