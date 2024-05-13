@@ -1,11 +1,21 @@
 const { ship, gameBoard, player } = require('./index');
 
-const webpage = (() => {
-    const player1 = player('foo')
-    const player2 = player('bar')
+const gameState = (() => {
+    const player1 = player('player1')
+    const player2 = player('player2')
 
     const currentPlayer = player1
 
+    const updatePlayer = (player, location) => {
+        return player.board.receiveAttack(location)
+    }
+
+    return {player1, player2, currentPlayer, updatePlayer}
+})();
+
+console.log(gameState.player1)
+
+const webpage = (() => {
     const createBoard = (player) => {
         // Create the main board div
         const board = document.createElement('div');
@@ -52,34 +62,30 @@ const webpage = (() => {
         }
     }
 
-    const updateCell = (player, location, cell) => {
-        const result = player.board.receiveAttack(location)
-        if (result != 'coordinates already selected') {
-            cell.innerHTML = result
-        }
-    }
-
     const cellSelect = (event) => {
         if (event.target.matches('.grid-cell')) {
             const location = JSON.parse(event.target.dataset.location)
-            updateCell(currentPlayer, location, event.target)
+            const result = gameState.updatePlayer(gameState.currentPlayer, location)
+            if (result != 'coordinates already selected') {
+                event.target.innerHTML = result
+            }
         }
     }
 
-    const enableListener = () => {
-        document.addEventListener('click', cellSelect)
+    const enableListener = (board) => {
+        board.addEventListener('click', cellSelect)
     }
 
-    const disableListener = () => {
-        document.addEventListener('click', cellSelect)
+    const disableListener = (board) => {
+        board.removeEventListener('click', cellSelect)
     }
 
-    createBoard(player1)
-    createBoard(player2)
+    createBoard(gameState.player1)
+    createBoard(gameState.player2)
 
     //test
-    player1.board.placeShip(ship(3), [[0, 0], [0, 1], [0, 2]]);
-    player1.board.placeShip(ship(2), [[1, 0], [1, 1]]);
-    updateBoard(player1)
-    enableListener()
+    gameState.player1.board.placeShip(ship(3), [[0, 0], [0, 1], [0, 2]]);
+    gameState.player1.board.placeShip(ship(2), [[1, 0], [1, 1]]);
+    updateBoard(gameState.player1)
+    enableListener(document.querySelector('#player1'))
 })();
