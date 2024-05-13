@@ -87,8 +87,8 @@ const webpage = (() => {
 })();
 
 
-    //test
-    gameState.player1.board.placeShip(ship(3), [[0, 0], [0, 1], [0, 2]]);
-    gameState.player1.board.placeShip(ship(2), [[1, 0], [1, 1]]);
-    webpage.updateBoard(gameState.player1)
-    webpage.enableListener(document.querySelector('#player1'))
+//test
+gameState.player1.board.placeShip(ship(3), [[0, 0], [0, 1], [0, 2]]);
+gameState.player1.board.placeShip(ship(2), [[1, 0], [1, 1]]);
+webpage.updateBoard(gameState.player1)
+webpage.enableListener(document.querySelector('#player1'))
