@@ -57,13 +57,8 @@ const webpage = (() => {
         }
     }
 
-    const enableListener = (player) => {
-        getPlayerBoard(player).addEventListener('click', cellSelect)
-    }
-
-    const disableListener = (player) => {
-        getPlayerBoard(player).removeEventListener('click', cellSelect)
-    }
+    const enableListener = (player) => getPlayerBoard(player).addEventListener('click', cellSelect)
+    const disableListener = (player) => getPlayerBoard(player).removeEventListener('click', cellSelect)
 
     return {createBoard, updateBoard, enableListener, disableListener}
 })();
@@ -74,9 +69,7 @@ const gameState = (() => {
 
     let currentOpponent = player2
 
-    const getOpponent = () => {
-        return currentOpponent
-    }
+    const getOpponent = () => currentOpponent
 
     const changeTurn = () => {
         webpage.disableListener(currentOpponent)
@@ -85,8 +78,6 @@ const gameState = (() => {
     }
 
     const updatePlayer = (player, location) => {
-        console.log(player)
-        console.log(currentOpponent)
         const res = player.board.receiveAttack(location)
         if (res != 'coordinates already selected') {
             changeTurn()
