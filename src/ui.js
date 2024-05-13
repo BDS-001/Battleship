@@ -83,9 +83,12 @@ const webpage = (() => {
     createBoard(gameState.player1)
     createBoard(gameState.player2)
 
+    return {updateBoard, enableListener}
+})();
+
+
     //test
     gameState.player1.board.placeShip(ship(3), [[0, 0], [0, 1], [0, 2]]);
     gameState.player1.board.placeShip(ship(2), [[1, 0], [1, 1]]);
-    updateBoard(gameState.player1)
-    enableListener(document.querySelector('#player1'))
-})();
+    webpage.updateBoard(gameState.player1)
+    webpage.enableListener(document.querySelector('#player1'))
