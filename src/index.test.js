@@ -1,4 +1,4 @@
-const { ship, gameBoard, player } = require('./index');
+const { ship, gameBoard, player, computer } = require('./index');
 
 describe('ship', () => {
 
@@ -134,3 +134,31 @@ describe('ship', () => {
       expect(typeof testPlayer.board.allShipsSunk).toBe('function');
     });
   }); 
+
+  describe('computer', () => {
+    describe('selectMove', () => {
+      test('should return an array of two integers between 0 and 9 inclusive', () => {
+        const comp = computer();
+        const move = comp.selectMove();
+        expect(Array.isArray(move)).toBe(true);
+        expect(move.length).toBe(2);
+        expect(Number.isInteger(move[0])).toBe(true);
+        expect(Number.isInteger(move[1])).toBe(true);
+        expect(move[0]).toBeGreaterThanOrEqual(0);
+        expect(move[0]).toBeLessThan(10);
+        expect(move[1]).toBeGreaterThanOrEqual(0);
+        expect(move[1]).toBeLessThan(10);
+      });
+  
+      test('should return different values on subsequent calls', () => {
+        const comp = computer();
+        const move1 = comp.selectMove();
+        const move2 = comp.selectMove();
+        expect(move1).not.toEqual(move2);
+      });
+    });
+  
+    describe('playMove', () => {
+      // Tests for playMove will go here
+    });
+  });

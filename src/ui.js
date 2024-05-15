@@ -101,6 +101,8 @@ const gameState = (() => {
     return {player1, player2, updatePlayer, getOpponent}
 })();
 
+
+
 function test() {
     webpage.createBoard(gameState.player1);
     webpage.createBoard(gameState.player2);

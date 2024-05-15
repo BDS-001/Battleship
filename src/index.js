@@ -70,7 +70,21 @@ const gameBoard = () => {
 const player = (playerName) => {
   const board = gameBoard()
   const name = playerName
-  return {board, name}
+  const computer = null
+  return {board, name, computer}
 }
 
-module.exports = {ship, gameBoard, player}
+const computer = () => {
+  const previousMove = null
+  const selectMove = () => {
+    return [Math.floor(Math.random() * 10), Math.floor(Math.random() * 10)]
+  }
+
+  const playMove = (opposingPlayer) => {
+    const result = opposingPlayer.board.receiveAttack(selectMove())
+  }
+  
+  return {selectMove}
+}
+
+module.exports = {ship, gameBoard, player, computer}
