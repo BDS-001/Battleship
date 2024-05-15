@@ -87,7 +87,12 @@ const gameState = (() => {
     //recieve and attack and returns the result of the selected coordinates
     const updatePlayer = (player, location) => {
         const res = player.board.receiveAttack(location)
-        if (res != 'coordinates already selected') {
+
+        if (player.board.allShipsSunk()) {
+            console.log('win')
+            webpage.disableListener(player)
+        }
+        else if (res != 'coordinates already selected') {
             changeTurn()
         }
         return res
@@ -96,21 +101,24 @@ const gameState = (() => {
     return {player1, player2, updatePlayer, getOpponent}
 })();
 
-//test
-webpage.createBoard(gameState.player1);
-webpage.createBoard(gameState.player2);
-webpage.enableListener(gameState.getOpponent());
-gameState.player1.board.placeShip(ship(5), [[0, 0], [0, 1], [0, 2], [0, 3], [0, 4]]);
-gameState.player1.board.placeShip(ship(4), [[2, 0], [2, 1], [2, 2], [2, 3]]);
-gameState.player1.board.placeShip(ship(3), [[4, 0], [4, 1], [4, 2]]);
-gameState.player1.board.placeShip(ship(3), [[6, 0], [6, 1], [6, 2]]);
-gameState.player1.board.placeShip(ship(2), [[8, 0], [8, 1]]);
+function test() {
+    webpage.createBoard(gameState.player1);
+    webpage.createBoard(gameState.player2);
+    webpage.enableListener(gameState.getOpponent());
+    gameState.player1.board.placeShip(ship(5), [[0, 0], [0, 1], [0, 2], [0, 3], [0, 4]]);
+    gameState.player1.board.placeShip(ship(4), [[2, 0], [2, 1], [2, 2], [2, 3]]);
+    gameState.player1.board.placeShip(ship(3), [[4, 0], [4, 1], [4, 2]]);
+    gameState.player1.board.placeShip(ship(3), [[6, 0], [6, 1], [6, 2]]);
+    gameState.player1.board.placeShip(ship(2), [[8, 0], [8, 1]]);
 
-gameState.player2.board.placeShip(ship(5), [[0, 5], [0, 6], [0, 7], [0, 8], [0, 9]]);
-gameState.player2.board.placeShip(ship(4), [[2, 5], [2, 6], [2, 7], [2, 8]]);
-gameState.player2.board.placeShip(ship(3), [[4, 5], [4, 6], [4, 7]]);
-gameState.player2.board.placeShip(ship(3), [[6, 5], [6, 6], [6, 7]]);
-gameState.player2.board.placeShip(ship(2), [[8, 5], [8, 6]]);
+    gameState.player2.board.placeShip(ship(5), [[0, 5], [0, 6], [0, 7], [0, 8], [0, 9]]);
+    gameState.player2.board.placeShip(ship(4), [[2, 5], [2, 6], [2, 7], [2, 8]]);
+    gameState.player2.board.placeShip(ship(3), [[4, 5], [4, 6], [4, 7]]);
+    gameState.player2.board.placeShip(ship(3), [[6, 5], [6, 6], [6, 7]]);
+    gameState.player2.board.placeShip(ship(2), [[8, 5], [8, 6]]);
 
-webpage.updateBoard(gameState.player1)
-webpage.updateBoard(gameState.player2)
+    webpage.updateBoard(gameState.player1)
+    webpage.updateBoard(gameState.player2)
+}
+
+test()
