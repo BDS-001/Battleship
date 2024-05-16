@@ -111,8 +111,8 @@ const gameState = (() => {
         }
     
         if (currentOpponent.computer) {
-            const { result, move } = currentOpponent.computer.playMove(player);
-            webpage.updateCell(player, move, result);
+            const { result, move } = currentOpponent.computer.playMove(currentPlayer);
+            webpage.updateCell(currentPlayer, move, result);
     
             if (result === 'retry') {
                 return res;
@@ -121,9 +121,9 @@ const gameState = (() => {
             if (checkWin(player)) {
                 return result;
             }
+        } else {
+            changeTurn();
         }
-    
-        changeTurn();
         return res;
     };
 
