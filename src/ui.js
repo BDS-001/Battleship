@@ -25,7 +25,7 @@ const webpage = (() => {
             }
             cell.dataset.location = JSON.stringify(location);
             cell.className = 'grid-cell';
-            cell.style.border = '1px solid black';
+            cell.style.border = '1px solid darkblue';
             board.appendChild(cell);
         }
 
