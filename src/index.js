@@ -50,7 +50,7 @@ const gameBoard = () => {
 
   const receiveAttack = (coordinates) => {
     const location = board[coordinates[0]][coordinates[1]]
-    if (location.hit != null) return null
+    if (location.hit != null) return 'retry'
     if (location.ship) {
       location.hit = true
       location.ship.hit()
@@ -67,24 +67,33 @@ const gameBoard = () => {
   return {board, placeShip, receiveAttack, allShipsSunk}
 }
 
-const player = (playerName) => {
+const player = (playerName, cpu = null) => {
   const board = gameBoard()
   const name = playerName
-  const computer = null
+  const computer = cpu
   return {board, name, computer}
 }
 
 const computer = () => {
-  const previousMove = null
+  const previousMove = null;
+
   const selectMove = () => {
-    return [Math.floor(Math.random() * 10), Math.floor(Math.random() * 10)]
-  }
+    return [Math.floor(Math.random() * 10), Math.floor(Math.random() * 10)];
+  };
 
   const playMove = (opposingPlayer) => {
-    const result = opposingPlayer.board.receiveAttack(selectMove())
-  }
-  
-  return {selectMove}
-}
+    let result;
+    let move;
+
+    do {
+      move = selectMove();
+      result = opposingPlayer.board.receiveAttack(move);
+    } while (result === "retry");
+
+    return { result, move };
+  };
+
+  return { selectMove, playMove };
+};
 
 module.exports = {ship, gameBoard, player, computer}

@@ -89,7 +89,7 @@ describe('ship', () => {
       const myShip = ship(2)
       myBoard.placeShip(myShip, [[4,6], [4,5]])
       myBoard.receiveAttack([4, 6])
-      expect(myBoard.receiveAttack([4, 6])).toBe(null)
+      expect(myBoard.receiveAttack([4, 6])).toBe('retry')
     });
   
     test('returns false when no ships are sunk', () => {
@@ -158,7 +158,45 @@ describe('ship', () => {
       });
     });
   
-    describe('playMove', () => {
-      // Tests for playMove will go here
+    describe('computer.playMove', () => {
+      let comp;
+      let opposingPlayer;
+    
+      beforeEach(() => {
+        comp = computer();
+        opposingPlayer = {
+          board: {
+            receiveAttack: jest.fn()
+          }
+        };
+      });
+    
+      test('should return a move and result that is not "retry"', () => {
+        opposingPlayer.board.receiveAttack.mockReturnValueOnce('miss');
+        
+        const { result, move } = comp.playMove(opposingPlayer);
+        
+        expect(Array.isArray(move)).toBe(true);
+        expect(move.length).toBe(2);
+        expect(Number.isInteger(move[0])).toBe(true);
+        expect(Number.isInteger(move[1])).toBe(true);
+        expect(result).not.toBe('retry');
+        expect(opposingPlayer.board.receiveAttack).toHaveBeenCalledWith(move);
+      });
+    
+      test('should retry if the result is "retry"', () => {
+        opposingPlayer.board.receiveAttack
+          .mockReturnValueOnce('retry')
+          .mockReturnValueOnce('hit');
+        
+        const { result, move } = comp.playMove(opposingPlayer);
+        
+        expect(Array.isArray(move)).toBe(true);
+        expect(move.length).toBe(2);
+        expect(Number.isInteger(move[0])).toBe(true);
+        expect(Number.isInteger(move[1])).toBe(true);
+        expect(result).not.toBe('retry');
+        expect(opposingPlayer.board.receiveAttack).toHaveBeenCalledTimes(2);
+      });
     });
   });

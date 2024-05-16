@@ -1,4 +1,4 @@
-const { ship, gameBoard, player } = require('./index');
+const { ship, gameBoard, player, computer } = require('./index');
 
 //controls webpage elements
 const webpage = (() => {
@@ -52,24 +52,29 @@ const webpage = (() => {
         if (event.target.matches('.grid-cell')) {
             const location = JSON.parse(event.target.dataset.location)
             const result = gameState.updatePlayer(gameState.getOpponent(), location)
-            if (result != null) {
+            if (result != 'retry') {
                 event.target.style.backgroundColor = result ? 'green' : 'red' 
             }
         }
+    }
+
+    const updateCell = (player, move, result) => {
+        const target = getPlayerBoard(player).querySelector(`.grid-cell[data-location='${JSON.stringify(move)}']`);
+        target.style.backgroundColor = result ? 'green' : 'red';
     }
 
     //enable and disable cells from being clicked
     const enableListener = (player) => getPlayerBoard(player).addEventListener('click', cellSelect)
     const disableListener = (player) => getPlayerBoard(player).removeEventListener('click', cellSelect)
 
-    return {createBoard, updateBoard, enableListener, disableListener}
+    return {createBoard, updateBoard, enableListener, disableListener, updateCell}
 })();
 
 //runs the battleship game
 const gameState = (() => {
     //initialize the players and starting state of the game
     const player1 = player('player1')
-    const player2 = player('player2')
+    const player2 = player('player2', computer())
     let currentPlayer = player1
     let currentOpponent = player2
 
@@ -78,25 +83,49 @@ const gameState = (() => {
 
     //update the currentPlayer and currentOpponent
     const changeTurn = () => {
-        webpage.disableListener(currentOpponent)
-        currentPlayer === player1 ? currentPlayer = player2 : currentPlayer = player1
-        currentOpponent === player1 ? currentOpponent = player2 : currentOpponent = player1
+        currentPlayer = currentPlayer === player1 ? player2 : player1;
+        currentOpponent = currentOpponent === player1 ? player2 : player1;
+        webpage.disableListener(currentPlayer)
         webpage.enableListener(currentOpponent)
     }
 
+    const checkWin = (player) => {
+        if (player.board.allShipsSunk()) {
+            console.log('win');
+            webpage.disableListener(player);
+            return true;
+        }
+        return false;
+    };
+
     //recieve and attack and returns the result of the selected coordinates
     const updatePlayer = (player, location) => {
-        const res = player.board.receiveAttack(location)
-
-        if (player.board.allShipsSunk()) {
-            console.log('win')
-            webpage.disableListener(player)
+        const res = player.board.receiveAttack(location);
+    
+        if (res === 'retry') {
+            return res;
         }
-        else if (res != null) {
-            changeTurn()
+    
+        if (checkWin(player)) {
+            return res;
         }
-        return res
-    }
+    
+        if (currentOpponent.computer) {
+            const { result, move } = currentOpponent.computer.playMove(player);
+            webpage.updateCell(player, move, result);
+    
+            if (result === 'retry') {
+                return res;
+            }
+    
+            if (checkWin(player)) {
+                return result;
+            }
+        }
+    
+        changeTurn();
+        return res;
+    };
 
     return {player1, player2, updatePlayer, getOpponent}
 })();
