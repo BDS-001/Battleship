@@ -52,7 +52,7 @@ const webpage = (() => {
         if (event.target.matches('.grid-cell')) {
             const location = JSON.parse(event.target.dataset.location)
             const result = gameState.updatePlayer(gameState.getOpponent(), location)
-            if (result != 'coordinates already selected') {
+            if (result != null) {
                 event.target.style.backgroundColor = result ? 'green' : 'red' 
             }
         }
@@ -92,7 +92,7 @@ const gameState = (() => {
             console.log('win')
             webpage.disableListener(player)
         }
-        else if (res != 'coordinates already selected') {
+        else if (res != null) {
             changeTurn()
         }
         return res

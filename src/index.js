@@ -50,7 +50,7 @@ const gameBoard = () => {
 
   const receiveAttack = (coordinates) => {
     const location = board[coordinates[0]][coordinates[1]]
-    if (location.hit != null) return 'coordinates already selected'
+    if (location.hit != null) return null
     if (location.ship) {
       location.hit = true
       location.ship.hit()

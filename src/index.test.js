@@ -89,7 +89,7 @@ describe('ship', () => {
       const myShip = ship(2)
       myBoard.placeShip(myShip, [[4,6], [4,5]])
       myBoard.receiveAttack([4, 6])
-      expect(myBoard.receiveAttack([4, 6])).toBe('coordinates already selected')
+      expect(myBoard.receiveAttack([4, 6])).toBe(null)
     });
   
     test('returns false when no ships are sunk', () => {
