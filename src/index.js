@@ -49,16 +49,32 @@ const gameBoard = () => {
   }
 
   const receiveAttack = (coordinates) => {
-    const location = board[coordinates[0]][coordinates[1]]
-    if (location.hit != null) return 'retry'
-    if (location.ship) {
-      location.hit = true
-      location.ship.hit()
-    } else {
-      location.hit = false
+    const location = board[coordinates[0]][coordinates[1]];
+    
+    if (location.hit != null) {
+      return {
+        status: 'retry',
+        hit: null,
+        sunk: null
+      };
     }
-    return location.hit
-  }
+    
+    if (location.ship) {
+      location.hit = true;
+      location.ship.hit();
+    } else {
+      location.hit = false;
+    }
+  
+    const result = {
+      status: 'success',
+      hit: location.hit,
+      sunk: location.ship ? location.ship.isSunk() : false
+    };
+    
+    return result;
+  };
+  
 
   const allShipsSunk = () => {
     return ships.every(ship => ship.sunk)
