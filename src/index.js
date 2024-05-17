@@ -52,27 +52,17 @@ const gameBoard = () => {
     const location = board[coordinates[0]][coordinates[1]];
     
     if (location.hit != null) {
-      return {
-        status: 'retry',
-        hit: null,
-        sunk: null
-      };
+      return { status: 'retry', hit: null, sunk: null };
     }
     
     if (location.ship) {
       location.hit = true;
       location.ship.hit();
+      return { status: 'success', hit: true, sunk: location.ship.isSunk() };
     } else {
       location.hit = false;
+      return { status: 'success', hit: false, sunk: false };
     }
-  
-    const result = {
-      status: 'success',
-      hit: location.hit,
-      sunk: location.ship ? location.ship.isSunk() : false
-    };
-    
-    return result;
   };
   
 

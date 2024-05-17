@@ -1,3 +1,4 @@
+const { result } = require('lodash');
 const { ship, gameBoard, player, computer } = require('./index');
 
 //controls webpage elements
@@ -51,16 +52,17 @@ const webpage = (() => {
     const cellSelect = (event) => {
         if (event.target.matches('.grid-cell')) {
             const location = JSON.parse(event.target.dataset.location)
-            const result = gameState.updatePlayer(gameState.getOpponent(), location)
-            if (result != 'retry') {
-                event.target.style.backgroundColor = result ? 'green' : 'red' 
+            const result = gameState.updatePlayer(gameState.getOpponent(), location);
+            console.log('result:',  result)
+            if (result.status != 'retry') {
+                event.target.style.backgroundColor = result.hit ? 'green' : 'red' 
             }
         }
     }
 
     const updateCell = (player, move, result) => {
         const target = getPlayerBoard(player).querySelector(`.grid-cell[data-location='${JSON.stringify(move)}']`);
-        target.style.backgroundColor = result ? 'green' : 'red';
+        target.style.backgroundColor = result.hit ? 'green' : 'red';
     }
 
     //enable and disable cells from being clicked
@@ -101,30 +103,38 @@ const gameState = (() => {
     //recieve and attack and returns the result of the selected coordinates
     const updatePlayer = (player, location) => {
         const res = player.board.receiveAttack(location);
-    
-        if (res === 'retry') {
+        console.log('updatePlayer res:', res);
+        
+        if (res.status === 'retry') {
             return res;
         }
-    
+      
         if (checkWin(player)) {
             return res;
         }
-    
+      
         if (currentOpponent.computer) {
-            const { result, move } = currentOpponent.computer.playMove(currentPlayer);
-            webpage.updateCell(currentPlayer, move, result);
-    
-            if (result === 'retry') {
-                return res;
-            }
-    
-            if (checkWin(player)) {
-                return result;
-            }
+            handleAI(currentOpponent, currentPlayer);
         } else {
             changeTurn();
         }
+        
         return res;
+    };
+
+    const handleAI = (computerPlayer, currentPlayer) => {
+        const { result, move } = computerPlayer.computer.playMove(currentPlayer);
+        webpage.updateCell(currentPlayer, move, result);
+      
+        if (result.status === 'retry') {
+            return result;
+        }
+      
+        if (checkWin(currentPlayer)) {
+            return result;
+        }
+      
+        return result;
     };
 
     return {player1, player2, updatePlayer, getOpponent}
