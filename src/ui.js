@@ -179,5 +179,5 @@ function test(mode) {
     webpage.updateBoard(player2);
 }
 
-// Run test with solo mode
+// Run test with solo mode and vs mode
 test('vs');
