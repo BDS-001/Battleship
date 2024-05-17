@@ -75,12 +75,22 @@ const webpage = (() => {
 //runs the battleship game
 const gameState = (() => {
     //initialize the players and starting state of the game
-    const player1 = player('player1')
-    const player2 = player('player2', computer())
-    let currentPlayer = player1
-    let currentOpponent = player2
+    let player1;
+    let player2;
+    let currentPlayer;
+    let currentOpponent;
+
+    const initializePlayers = (mode) => {
+        player1 = player('player1');
+        player2 = mode === 'solo' ? player('player2', computer()) : player('player2');
+        currentPlayer = player1;
+        currentOpponent = player2;
+    };
 
     //returns the currentOpponent
+    const getPlayer1 = () => player1
+    const getPlayer2 = () => player2
+    const getCurrentPlayer = () => currentPlayer
     const getOpponent = () => currentOpponent
 
     //update the currentPlayer and currentOpponent
@@ -137,29 +147,37 @@ const gameState = (() => {
         return result;
     };
 
-    return {player1, player2, updatePlayer, getOpponent}
+    return {getPlayer1, getPlayer2, updatePlayer, getOpponent, getCurrentPlayer, initializePlayers}
 })();
 
 
 
-function test() {
-    webpage.createBoard(gameState.player1);
-    webpage.createBoard(gameState.player2);
+function test(mode) {
+    gameState.initializePlayers(mode);
+    console.log(gameState.getPlayer1(), gameState.getPlayer2());
+
+    webpage.createBoard(gameState.getPlayer1());
+    webpage.createBoard(gameState.getPlayer2());
     webpage.enableListener(gameState.getOpponent());
-    gameState.player1.board.placeShip(ship(5), [[0, 0], [0, 1], [0, 2], [0, 3], [0, 4]]);
-    gameState.player1.board.placeShip(ship(4), [[2, 0], [2, 1], [2, 2], [2, 3]]);
-    gameState.player1.board.placeShip(ship(3), [[4, 0], [4, 1], [4, 2]]);
-    gameState.player1.board.placeShip(ship(3), [[6, 0], [6, 1], [6, 2]]);
-    gameState.player1.board.placeShip(ship(2), [[8, 0], [8, 1]]);
 
-    gameState.player2.board.placeShip(ship(5), [[0, 5], [0, 6], [0, 7], [0, 8], [0, 9]]);
-    gameState.player2.board.placeShip(ship(4), [[2, 5], [2, 6], [2, 7], [2, 8]]);
-    gameState.player2.board.placeShip(ship(3), [[4, 5], [4, 6], [4, 7]]);
-    gameState.player2.board.placeShip(ship(3), [[6, 5], [6, 6], [6, 7]]);
-    gameState.player2.board.placeShip(ship(2), [[8, 5], [8, 6]]);
+    const player1 = gameState.getPlayer1();
+    const player2 = gameState.getPlayer2();
 
-    webpage.updateBoard(gameState.player1)
-    webpage.updateBoard(gameState.player2)
+    player1.board.placeShip(ship(5), [[0, 0], [0, 1], [0, 2], [0, 3], [0, 4]]);
+    player1.board.placeShip(ship(4), [[2, 0], [2, 1], [2, 2], [2, 3]]);
+    player1.board.placeShip(ship(3), [[4, 0], [4, 1], [4, 2]]);
+    player1.board.placeShip(ship(3), [[6, 0], [6, 1], [6, 2]]);
+    player1.board.placeShip(ship(2), [[8, 0], [8, 1]]);
+
+    player2.board.placeShip(ship(5), [[0, 5], [0, 6], [0, 7], [0, 8], [0, 9]]);
+    player2.board.placeShip(ship(4), [[2, 5], [2, 6], [2, 7], [2, 8]]);
+    player2.board.placeShip(ship(3), [[4, 5], [4, 6], [4, 7]]);
+    player2.board.placeShip(ship(3), [[6, 5], [6, 6], [6, 7]]);
+    player2.board.placeShip(ship(2), [[8, 5], [8, 6]]);
+
+    webpage.updateBoard(player1);
+    webpage.updateBoard(player2);
 }
 
-test()
+// Run test with solo mode
+test('vs');
