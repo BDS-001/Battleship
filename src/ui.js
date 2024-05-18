@@ -150,7 +150,10 @@ const gameState = (() => {
     return {getPlayer1, getPlayer2, updatePlayer, getOpponent, getCurrentPlayer, initializePlayers}
 })();
 
+//select game mode before game starts
+const menu = () => {
 
+}
 
 function test(mode) {
     gameState.initializePlayers(mode);
