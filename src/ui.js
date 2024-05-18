@@ -87,7 +87,7 @@ const gameState = (() => {
         currentOpponent = player2;
     };
 
-    //returns the currentOpponent
+    //returns the player information
     const getPlayer1 = () => player1
     const getPlayer2 = () => player2
     const getCurrentPlayer = () => currentPlayer
@@ -151,9 +151,35 @@ const gameState = (() => {
 })();
 
 //select game mode before game starts
-const menu = () => {
+const menu = (() => {
 
-}
+    const modeSelect = (event) => {
+        document.body.innerHTML = ''
+        test(event.target.dataset.mode)
+    }
+
+    const generateMenu = () => {
+        const body = document.querySelector('body')
+        body.innerHTML = ''
+        console.log(body)
+
+        const solo = document.createElement('button')
+        const vs = document.createElement('button')
+    
+        solo.innerHTML = 'solo';
+        vs.innerHTML= 'vs';
+        solo.dataset.mode = 'solo';
+        vs.dataset.mode = 'vs';
+
+        solo.addEventListener('click', modeSelect)
+        vs.addEventListener('click', modeSelect)
+
+        body.append(solo)
+        body.append(vs)
+    }
+
+    return {generateMenu, modeSelect}
+})();
 
 function test(mode) {
     gameState.initializePlayers(mode);
@@ -182,5 +208,4 @@ function test(mode) {
     webpage.updateBoard(player2);
 }
 
-// Run test with solo mode and vs mode
-test('vs');
+menu.generateMenu()
