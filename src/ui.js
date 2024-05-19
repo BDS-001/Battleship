@@ -53,7 +53,6 @@ const webpage = (() => {
         if (event.target.matches('.grid-cell')) {
             const location = JSON.parse(event.target.dataset.location)
             const result = gameState.updatePlayer(gameState.getOpponent(), location);
-            console.log('result:',  result)
             if (result.status != 'retry') {
                 event.target.style.backgroundColor = result.hit ? 'green' : 'red' 
             }
@@ -113,7 +112,6 @@ const gameState = (() => {
     //recieve and attack and returns the result of the selected coordinates
     const updatePlayer = (player, location) => {
         const res = player.board.receiveAttack(location);
-        console.log('updatePlayer res:', res);
         
         if (res.status === 'retry') {
             return res;
@@ -155,13 +153,12 @@ const menu = (() => {
 
     const modeSelect = (event) => {
         document.body.innerHTML = ''
-        test(event.target.dataset.mode)
+        engine(event.target.dataset.mode)
     }
 
     const generateMenu = () => {
         const body = document.querySelector('body')
         body.innerHTML = ''
-        console.log(body)
 
         const solo = document.createElement('button')
         const vs = document.createElement('button')
@@ -181,9 +178,8 @@ const menu = (() => {
     return {generateMenu, modeSelect}
 })();
 
-function test(mode) {
+function engine(mode) {
     gameState.initializePlayers(mode);
-    console.log(gameState.getPlayer1(), gameState.getPlayer2());
 
     webpage.createBoard(gameState.getPlayer1());
     webpage.createBoard(gameState.getPlayer2());
