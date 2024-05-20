@@ -76,11 +76,11 @@ const gameBoard = () => {
 const player = (playerName, cpu = null) => {
   const board = gameBoard()
   const name = playerName
-  const computer = cpu
-  return {board, name, computer}
+  const computerPlayer  = cpu ? cpu(board) : null;
+  return {board, name, computer:computerPlayer}
 }
 
-const computer = () => {
+const computer = (board) => {
   const previousMove = null;
 
   const selectMove = () => {
@@ -99,7 +99,34 @@ const computer = () => {
     return { result, move };
   };
 
-  return { selectMove, playMove };
+  const genCoordinates = (ship, origin, direction) => {
+    const coordinates = []
+    for (let i = 0; i < ship.length; i++) {
+      if (direction === 'horizontal') {
+        coordinates.push([origin[0], origin[1] + i])
+      }
+      if (direction === 'vertical') {
+        coordinates.push([origin[0] + i, origin[1]])
+      } 
+    }
+    return coordinates
+  }
+
+  const placeShips = () => {
+    const ships = [ship(2), ship(3), ship(3), ship(4), ship(5)]
+
+    ships.forEach((ship) => {
+      let placed = false;
+      while (!placed) {
+        const origin = selectMove()
+        const direction = Math.random() > 0.5 ? 'horizontal' : 'vertical';
+
+        placed = board.placeShip(ship, genCoordinates(ship, origin, direction));
+      }
+    });
+  }
+
+  return { selectMove, playMove, placeShips, genCoordinates};
 };
 
 module.exports = {ship, gameBoard, player, computer}

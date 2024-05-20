@@ -199,4 +199,68 @@ describe('ship', () => {
         expect(opposingPlayer.board.receiveAttack).toHaveBeenCalledTimes(2);
       });
     });
+    describe('computer place ships', () => {
+      let testComputer;
+      let testBoard;
+    
+      beforeEach(() => {
+        const testPlayer = player('comp', computer);
+        testComputer = testPlayer.computer;
+        testBoard = testPlayer.board;
+      });
+    
+      test('genCoordinates generates correct coordinates for horizontal direction', () => {
+        const testShip = ship(3);
+        const origin = [0, 0];
+        const direction = 'horizontal';
+        const coordinates = testComputer.genCoordinates(testShip, origin, direction);
+    
+        expect(coordinates).toEqual([[0, 0], [0, 1], [0, 2]]);
+      });
+    
+      test('genCoordinates generates correct coordinates for vertical direction', () => {
+        const testShip = ship(3);
+        const origin = [0, 0];
+        const direction = 'vertical';
+        const coordinates = testComputer.genCoordinates(testShip, origin, direction);
+    
+        expect(coordinates).toEqual([[0, 0], [1, 0], [2, 0]]);
+      });
+    
+      test('placeShips places all ships on the board without conflicts', () => {
+        testComputer.placeShips();
+        const boardState = testBoard.board;
+        const placedShips = [];
+    
+        // Collect all placed ships
+        boardState.forEach(row => {
+          row.forEach(cell => {
+            if (cell.ship && !placedShips.includes(cell.ship)) {
+              placedShips.push(cell.ship);
+            }
+          });
+        });
+    
+        expect(placedShips.length).toBe(5); // There are 5 ships to be placed
+    
+        placedShips.forEach(ship => {
+          expect(ship.hits).toBe(0);
+          expect(ship.isSunk()).toBe(false);
+        });
+      });
+    
+      test('placeShips places all ships within board boundaries', () => {
+        testComputer.placeShips();
+        const boardState = testBoard.board;
+    
+        boardState.forEach((row, rowIndex) => {
+          row.forEach((cell, colIndex) => {
+            if (cell.ship) {
+              expect(rowIndex).toBeLessThan(10);
+              expect(colIndex).toBeLessThan(10);
+            }
+          });
+        });
+      });
+    });
   });

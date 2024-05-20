@@ -7,7 +7,8 @@ const webpage = (() => {
         // Create the main board div
         const board = document.createElement('div');
         board.className = 'board';
-        board.style.display = 'grid';
+        board.style.display = 'grid'
+        //board.style.display = 'none';
         board.id = player.name
         board.style.gridTemplateColumns = 'repeat(10, 40px)';  // Sets the layout to 10 columns
         board.style.gridTemplateRows = 'repeat(10, 40px)';     // Sets the layout to 10 rows
@@ -81,7 +82,7 @@ const gameState = (() => {
 
     const initializePlayers = (mode) => {
         player1 = player('player1');
-        player2 = mode === 'solo' ? player('player2', computer()) : player('player2');
+        player2 = mode === 'solo' ? player('player2', computer) : player('player2');
         currentPlayer = player1;
         currentOpponent = player2;
     };
@@ -145,7 +146,14 @@ const gameState = (() => {
         return result;
     };
 
-    return {getPlayer1, getPlayer2, updatePlayer, getOpponent, getCurrentPlayer, initializePlayers}
+    const placeShips = (player) => {
+        if (player.computer) return player.computer.placeShips()
+        const ships = [ship(2), ship(3), ship(3), ship(4), ship(5)]
+        const board = webpage.getPlayerBoard(player)
+        board.display = 'grid'
+    }
+
+    return {getPlayer1, getPlayer2, updatePlayer, getOpponent, getCurrentPlayer, initializePlayers, placeShips}
 })();
 
 //select game mode before game starts
@@ -183,6 +191,9 @@ function engine(mode) {
 
     webpage.createBoard(gameState.getPlayer1());
     webpage.createBoard(gameState.getPlayer2());
+
+    //gameState.placeShips(player)
+
     webpage.enableListener(gameState.getOpponent());
 
     const player1 = gameState.getPlayer1();
