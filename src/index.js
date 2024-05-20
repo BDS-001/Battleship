@@ -42,10 +42,9 @@ const gameBoard = () => {
         board[row][col].ship = ship
       });
       ships.push(ship)
+      return true
     }
-    else {
-      return checkResponse
-    }
+    return false
   }
 
   const receiveAttack = (coordinates) => {
@@ -120,9 +119,12 @@ const computer = (board) => {
       while (!placed) {
         const origin = selectMove()
         const direction = Math.random() > 0.5 ? 'horizontal' : 'vertical';
+        const coordinates = genCoordinates(ship, origin, direction)
 
-        placed = board.placeShip(ship, genCoordinates(ship, origin, direction));
+        placed = board.placeShip(ship, coordinates);
+        console.log(placed)
       }
+      console.log(board)
     });
   }
 
