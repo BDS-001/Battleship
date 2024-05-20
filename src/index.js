@@ -29,12 +29,12 @@ const gameBoard = () => {
       if (row >= 10 || col >= 10 || row < 0 || col < 0) return 'coordinates out of range'
       if (board[row][col].ship !== null) return 'Ship already exists';
     }
-    return true
+    return 'success'
   }
 
   const placeShip = (ship, coordinates) => {
     const checkResponse = validCoordinates(coordinates)
-    if (checkResponse === true) {
+    if (checkResponse === 'success') {
       coordinates.forEach(location => {
         const row = location[0]
         const col = location[1]
