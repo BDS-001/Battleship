@@ -21,3 +21,23 @@ body {
 .grid-cell:hover {
   cursor: pointer;
 }
+
+#ship-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.ship {
+  width: 80px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: grab;
+  background-color: grey;
+  /* background-image: url(./ship.png);
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat; */
+}

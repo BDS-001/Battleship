@@ -3,15 +3,19 @@ const { ship, gameBoard, player, computer } = require('./index');
 
 //controls webpage elements
 const webpage = (() => {
+
     const createBoard = (player) => {
         // Create the main board div
         const board = document.createElement('div');
         board.className = 'board';
-        board.style.display = 'grid'
-        //board.style.display = 'none';
+        //board.style.display = 'grid'
+        board.style.display = 'none';
         board.id = player.name
         board.style.gridTemplateColumns = 'repeat(10, 40px)';  // Sets the layout to 10 columns
         board.style.gridTemplateRows = 'repeat(10, 40px)';     // Sets the layout to 10 rows
+
+        // Add data-setup-complete attribute to track ship setup completion
+        board.dataset.setupComplete = 'false';
 
         // Loop to create each cell in the grid
         let row = 0
@@ -31,9 +35,7 @@ const webpage = (() => {
             cell.style.border = '1px solid darkblue';
             board.appendChild(cell);
         }
-
-        // Append the board to the body of the page
-        document.body.appendChild(board);
+        document.body.append(board)
     }
 
     //return the ui board when given a palyer
@@ -66,11 +68,24 @@ const webpage = (() => {
         target.style.backgroundColor = result.hit ? 'green' : 'red';
     }
 
+    const generateShipContainer = () => {
+        // Create the div element
+        const shipContainer = document.createElement('div');
+  
+        // Add the class 'ship-container'
+        shipContainer.className = 'ship-container';
+        
+        // Append the div to the body
+        document.body.appendChild(shipContainer);
+    }
+
+    const getBoards = () => boards
+
     //enable and disable cells from being clicked
     const enableListener = (player) => getPlayerBoard(player).addEventListener('click', cellSelect)
     const disableListener = (player) => getPlayerBoard(player).removeEventListener('click', cellSelect)
 
-    return {createBoard, updateBoard, enableListener, disableListener, updateCell}
+    return {createBoard, updateBoard, enableListener, disableListener, updateCell, getBoards, generateShipContainer}
 })();
 
 //runs the battleship game
@@ -89,8 +104,10 @@ const gameState = (() => {
     };
 
     //returns the player information
-    const getPlayer1 = () => player1
-    const getPlayer2 = () => player2
+    const getPlayer = (playerName) => {
+        if (playerName === 'player1') return player1
+        if (playerName === 'player2') return player2
+    }
     const getCurrentPlayer = () => currentPlayer
     const getOpponent = () => currentOpponent
 
@@ -149,12 +166,11 @@ const gameState = (() => {
 
     const placeShips = (player) => {
         if (player.computer) return player.computer.placeShips()
-        const ships = [ship(2), ship(3), ship(3), ship(4), ship(5)]
         const board = webpage.getPlayerBoard(player)
         board.display = 'grid'
     }
 
-    return {getPlayer1, getPlayer2, updatePlayer, getOpponent, getCurrentPlayer, initializePlayers, placeShips}
+    return {getPlayer, updatePlayer, getOpponent, getCurrentPlayer, initializePlayers, placeShips}
 })();
 
 //select game mode before game starts
@@ -162,7 +178,7 @@ const menu = (() => {
 
     const modeSelect = (event) => {
         document.body.innerHTML = ''
-        engine(event.target.dataset.mode)
+        engine.setMode(event.target.dataset.mode)
     }
 
     const generateMenu = () => {
@@ -187,11 +203,36 @@ const menu = (() => {
     return {generateMenu, modeSelect}
 })();
 
-const shipPlacementHandler = () => {
+const shipPlacementHandler = (() => {
     let currentHoveredCells = [];
     
+    const generateShips = () => {
+        const ships = [
+            { id: 'ship-1', length: 5 },
+            { id: 'ship-2', length: 4 },
+            { id: 'ship-3', length: 3 },
+            { id: 'ship-4', length: 3 },
+            { id: 'ship-5', length: 2 }
+          ];
+      
+          const shipContainer = document.querySelector('.ship-container');
+      
+          ships.forEach(ship => {
+            const shipDiv = document.createElement('div');
+            shipDiv.className = 'ship horizontal';
+            shipDiv.id = ship.id;
+            shipDiv.setAttribute('draggable', 'true');
+            shipDiv.setAttribute('data-length', ship.length);
+            shipDiv.setAttribute('data-placed', 'false');
+            shipContainer.appendChild(shipDiv);
+          });
+
+          return shipContainer
+    }
+
     //requires board cells and placement Ships
-    const setupPlacements = (board, ships) => {
+    const setupPlacements = (board) => {
+        const ships = document.querySelectorAll('.ships')
         board.forEach(cell => {
             cell.addEventListener('dragover', dragOver);
             cell.addEventListener('dragleave', dragLeave);
@@ -276,35 +317,54 @@ const shipPlacementHandler = () => {
         ship.style.top = `${dropCell.getBoundingClientRect().top}px`;
         ship.draggable = false; // Disable further dragging once placed
     }
-}
 
-function engine(mode) {
-    gameState.initializePlayers(mode);
+    return {generateShips, setupPlacements}
+})();
 
-    webpage.createBoard(gameState.getPlayer1());
-    webpage.createBoard(gameState.getPlayer2());
+const engine = (() => {
+    const start = () => {
+        menu.generateMenu()
+    }
+
+    const setMode = (mode) => {
+        gameState.initializePlayers(mode);
+        webpage.createBoard(gameState.getPlayer('player1'))
+        webpage.createBoard(gameState.getPlayer('player2'))
+        webpage.generateShipContainer()
+        setupPlaceShips()
+    }
+
+    const setupPlaceShips = () => {
+        const boards = document.querySelectorAll('.board');
+        const firstIncompleteBoard = Array.from(boards).find(board => board.dataset.setupComplete === 'false');
+        if (!firstIncompleteBoard) return
+        firstIncompleteBoard.style.display = 'grid'
+        shipPlacementHandler.generateShips()
+    }
 
     //gameState.placeShips(player)
 
-    webpage.enableListener(gameState.getOpponent());
+    // webpage.enableListener(gameState.getOpponent());
 
-    const player1 = gameState.getPlayer1();
-    const player2 = gameState.getPlayer2();
+    // const player1 = gameState.getPlayer1();
+    // const player2 = gameState.getPlayer2();
 
-    player1.board.placeShip(ship(5), [[0, 0], [0, 1], [0, 2], [0, 3], [0, 4]]);
-    player1.board.placeShip(ship(4), [[2, 0], [2, 1], [2, 2], [2, 3]]);
-    player1.board.placeShip(ship(3), [[4, 0], [4, 1], [4, 2]]);
-    player1.board.placeShip(ship(3), [[6, 0], [6, 1], [6, 2]]);
-    player1.board.placeShip(ship(2), [[8, 0], [8, 1]]);
+    // player1.board.placeShip(ship(5), [[0, 0], [0, 1], [0, 2], [0, 3], [0, 4]]);
+    // player1.board.placeShip(ship(4), [[2, 0], [2, 1], [2, 2], [2, 3]]);
+    // player1.board.placeShip(ship(3), [[4, 0], [4, 1], [4, 2]]);
+    // player1.board.placeShip(ship(3), [[6, 0], [6, 1], [6, 2]]);
+    // player1.board.placeShip(ship(2), [[8, 0], [8, 1]]);
 
-    player2.board.placeShip(ship(5), [[0, 5], [0, 6], [0, 7], [0, 8], [0, 9]]);
-    player2.board.placeShip(ship(4), [[2, 5], [2, 6], [2, 7], [2, 8]]);
-    player2.board.placeShip(ship(3), [[4, 5], [4, 6], [4, 7]]);
-    player2.board.placeShip(ship(3), [[6, 5], [6, 6], [6, 7]]);
-    player2.board.placeShip(ship(2), [[8, 5], [8, 6]]);
+    // player2.board.placeShip(ship(5), [[0, 5], [0, 6], [0, 7], [0, 8], [0, 9]]);
+    // player2.board.placeShip(ship(4), [[2, 5], [2, 6], [2, 7], [2, 8]]);
+    // player2.board.placeShip(ship(3), [[4, 5], [4, 6], [4, 7]]);
+    // player2.board.placeShip(ship(3), [[6, 5], [6, 6], [6, 7]]);
+    // player2.board.placeShip(ship(2), [[8, 5], [8, 6]]);
 
-    webpage.updateBoard(player1);
-    webpage.updateBoard(player2);
-}
+    // webpage.updateBoard(player1);
+    // webpage.updateBoard(player2);
 
-menu.generateMenu()
+    return {start, setMode}
+})();
+
+engine.start()
