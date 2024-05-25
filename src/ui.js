@@ -1,4 +1,3 @@
-const { result } = require('lodash');
 const { ship, gameBoard, player, computer } = require('./index');
 
 // controls webpage elements
@@ -184,6 +183,7 @@ const menu = (() => {
 
 const shipPlacementHandler = (() => {
     let currentHoveredCells = [];
+    let placedShips = {};
 
     const generateShips = () => {
         const ships = [
@@ -220,12 +220,19 @@ const shipPlacementHandler = (() => {
 
         ships.forEach((ship) => {
             ship.addEventListener('dragstart', dragStart);
-            ship.style.width = `${ship.dataset.length * 40}px`;
         });
     };
 
     function dragStart(e) {
-        e.dataTransfer.setData('text/plain', e.target.id);
+        const shipId = e.target.id;
+        if (placedShips[shipId]) {
+            placedShips[shipId].forEach((cell) => {
+                cell.classList.remove('occupied');
+                cell.style.backgroundColor = '';
+            });
+            placedShips[shipId] = [];
+        }
+        e.dataTransfer.setData('text/plain', shipId);
     }
 
     function dragOver(e) {
@@ -280,14 +287,17 @@ const shipPlacementHandler = (() => {
             }
         }
 
+        const newOccupiedCells = [];
         for (let i = 0; i < shipLength; i++) {
             const cell = document.querySelector(`.grid-cell[data-index="${startIndex + i}"]`);
             cell.classList.add('occupied');
+            newOccupiedCells.push(cell);
         }
+        placedShips[shipId] = newOccupiedCells;
         ship.style.position = 'absolute';
         ship.style.left = `${dropCell.getBoundingClientRect().left}px`;
         ship.style.top = `${dropCell.getBoundingClientRect().top}px`;
-        ship.draggable = false;
+        ship.setAttribute('data-placed', 'true');
     }
 
     return { generateShips, setupPlacements };

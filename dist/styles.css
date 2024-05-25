@@ -7,19 +7,21 @@ body {
     gap: 20px;
     align-items: center;
     padding: 20px;
-    background-color: black;
-    color: white;
   }
   
   #board {
     display: grid;
     grid-template-columns: repeat(10, 1fr);
-    border: 5px solid white;
     padding: 1px;
+}
+
+.grid-cell {
+  background-color: lightblue;
 }
 
 .grid-cell:hover {
   cursor: pointer;
+  background-color: lightgray;
 }
 
 #ship-container {
@@ -35,9 +37,8 @@ body {
   justify-content: center;
   align-items: center;
   cursor: grab;
-  background-color: grey;
-  /* background-image: url(./ship.png);
+  background-image: url(../src/assets/images/ship.png);
   background-size: contain;
   background-position: center;
-  background-repeat: no-repeat; */
+  background-repeat: no-repeat;
 }
