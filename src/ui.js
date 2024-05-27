@@ -306,7 +306,16 @@ const shipPlacementHandler = (() => {
         ship.setAttribute('data-placed', 'true');
     }
 
-    return { generateShips, setupPlacements };
+    function enableLockIn () {
+        const lockIn = document.getElementById('lock-in')
+        lockIn.addEventListener('click', () => {
+            const ships = Array.from(document.querySelectorAll('.ship'))
+            const anyNonPlacedShip = Array.from(ships).some(ship => ship.dataset.placed === 'false');
+            anyNonPlacedShip ? alert('not all ships placed') : alert('all ships placed');
+        })
+    }
+
+    return { generateShips, setupPlacements, enableLockIn };
 })();
 
 const engine = (() => {
@@ -329,6 +338,7 @@ const engine = (() => {
         firstIncompleteBoard.style.display = 'grid';
         shipPlacementHandler.generateShips();
         shipPlacementHandler.setupPlacements(firstIncompleteBoard.querySelectorAll('.grid-cell'));
+        shipPlacementHandler.enableLockIn()
     };
 
     return { start, setMode };
