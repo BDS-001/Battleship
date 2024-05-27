@@ -61,6 +61,12 @@ const webpage = (() => {
     const generateShipContainer = () => {
         const shipContainer = document.createElement('div');
         shipContainer.className = 'ship-container';
+
+        const lockIn = document.createElement('button')
+        lockIn.id = 'lock-in'
+        lockIn.innerHTML = 'LOCK IN'
+        shipContainer.appendChild(lockIn)
+
         document.body.appendChild(shipContainer);
     };
 
