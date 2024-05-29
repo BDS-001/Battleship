@@ -190,6 +190,7 @@ const menu = (() => {
 const shipPlacementHandler = (() => {
     let currentHoveredCells = [];
     let placedShips = {};
+    let activeBoard = null
 
     const generateShips = () => {
         const ships = [
@@ -306,12 +307,21 @@ const shipPlacementHandler = (() => {
         ship.setAttribute('data-placed', 'true');
     }
 
+    function saveShipPlacements() {
+        alert('all ships placed');
+    }
+
     function enableLockIn () {
         const lockIn = document.getElementById('lock-in')
         lockIn.addEventListener('click', () => {
             const ships = Array.from(document.querySelectorAll('.ship'))
             const anyNonPlacedShip = Array.from(ships).some(ship => ship.dataset.placed === 'false');
-            anyNonPlacedShip ? alert('not all ships placed') : alert('all ships placed');
+            if (anyNonPlacedShip ) {
+                alert('not all ships placed')
+            }  else {
+                saveShipPlacements()
+
+            }
         })
     }
 
