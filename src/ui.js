@@ -190,7 +190,7 @@ const menu = (() => {
 const shipPlacementHandler = (() => {
     let currentHoveredCells = [];
     let placedShips = {};
-    let activeBoard = null
+    let activePlayer = null
 
     const generateShips = () => {
         const ships = [
@@ -211,6 +211,7 @@ const shipPlacementHandler = (() => {
             shipDiv.setAttribute('data-length', ship.length);
             shipDiv.setAttribute('data-placed', 'false');
             shipDiv.setAttribute('origin', 'none');
+            shipDiv.setAttribute('direction', 'horizontal');
             shipDiv.style.width = `${ship.length * 40}px`;
             shipContainer.appendChild(shipDiv);
         });
@@ -309,8 +310,26 @@ const shipPlacementHandler = (() => {
         ship.setAttribute('origin', dropCell.dataset.location);
     }
 
-    function saveShipPlacements() {
-        alert('all ships placed');
+    const genCoordinates = (ship, origin, direction) => {
+        const coordinates = []
+        for (let i = 0; i < ship.length; i++) {
+          if (direction === 'horizontal') {
+            coordinates.push([origin[0], origin[1] + i])
+          }
+          if (direction === 'vertical') {
+            coordinates.push([origin[0] + i, origin[1]])
+          } 
+        }
+        return coordinates
+    }
+
+    function saveShipPlacements(ships) {
+        for (let i = 0; i < ships.length; i++) {
+            const placementShip = ships[i]
+            const gamePiece = ship(placementShip.dataset.length)
+            const coordinates = genCoordinates(gamePiece, placementShip.dataset.origin, placementShip.dataset.direction)
+            activePlayer.board.placeShip(gamePiece, coordinates)
+        }
     }
 
     function enableLockIn () {
@@ -321,10 +340,18 @@ const shipPlacementHandler = (() => {
             if (anyNonPlacedShip ) {
                 alert('not all ships placed')
             }  else {
-                saveShipPlacements()
-
+                //saveShipPlacements(ships)
+                //console.log(activePlayer.board)
+                alert('all ships placed')
             }
         })
+    }
+
+    function getIncompleteBoard() {
+        const boards = document.querySelectorAll('.board');
+        const firstIncompleteBoard = Array.from(boards).find((board) => board.dataset.setupComplete === 'false');
+        if (firstIncompleteBoard) activePlayer = gameState.getPlayer(firstIncompleteBoard.id)
+        return firstIncompleteBoard
     }
 
     return { generateShips, setupPlacements, enableLockIn };
