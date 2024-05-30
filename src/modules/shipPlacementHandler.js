@@ -133,7 +133,7 @@ const shipPlacementHandler = (() => {
     }
 
     function clearShips() {
-        document.querySelector('.ship-container').innerHTML = ''
+        document.querySelector('.ship-container').remove()
     }
 
     function enableLockIn(board) {
