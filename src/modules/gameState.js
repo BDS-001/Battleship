@@ -25,14 +25,14 @@ const gameState = (() => {
     const changeTurn = () => {
         currentPlayer = currentPlayer === player1 ? player2 : player1;
         currentOpponent = currentOpponent === player1 ? player2 : player1;
-        webpage.disableListener(currentPlayer);
-        webpage.enableListener(currentOpponent);
+        disableListener(currentPlayer);
+        enableListener(currentOpponent);
     };
 
     const checkWin = (player) => {
         if (player.board.allShipsSunk()) {
             console.log('win');
-            webpage.disableListener(player);
+            disableListener(player);
             return true;
         }
         return false;
@@ -79,14 +79,27 @@ const gameState = (() => {
         board.display = 'grid';
     };
 
+    const cellSelect = (event) => {
+        if (event.target.matches('.grid-cell')) {
+            const location = JSON.parse(event.target.dataset.location);
+            const result = updatePlayer(getOpponent(), location);
+            if (result.status != 'retry') {
+                event.target.style.backgroundColor = result.hit ? 'green' : 'red';
+            }
+        }
+    };
+
+    const enableListener = (player) => webpage.getPlayerBoard(player).addEventListener('click', cellSelect);
+    const disableListener = (player) => webpage.getPlayerBoard(player).removeEventListener('click', cellSelect);
+
     function startGame() {
         document.querySelectorAll('.board').forEach(board => {
             board.style.display = 'grid'
-            if (board.id === 'player1') webpage.enableListener(player1)
+            if (board.id === 'player1') enableListener(player1)
         });
     }
 
-    return { getPlayer, updatePlayer, getOpponent, getCurrentPlayer, initializePlayers, placeShips, startGame };
+    return { getPlayer, updatePlayer, getOpponent, getCurrentPlayer, initializePlayers, placeShips, startGame, enableListener, disableListener };
 })();
 
 module.exports = gameState;

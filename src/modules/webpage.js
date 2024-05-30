@@ -1,5 +1,3 @@
-const gameState = require('./gameState');
-
 const webpage = (() => {
     const createBoard = (player) => {
         const board = document.createElement('div');
@@ -38,16 +36,6 @@ const webpage = (() => {
         for (let row = 0; row <= 9; row++) {
             for (let col = 0; col <= 9; col++) {
                 if (player.board.board[row][col].ship) board[(row * 10) + col].innerHTML = 's';
-            }
-        }
-    };
-
-    const cellSelect = (event) => {
-        if (event.target.matches('.grid-cell')) {
-            const location = JSON.parse(event.target.dataset.location);
-            const result = gameState.updatePlayer(gameState.getOpponent(), location);
-            if (result.status != 'retry') {
-                event.target.style.backgroundColor = result.hit ? 'green' : 'red';
             }
         }
     };
@@ -96,10 +84,7 @@ const webpage = (() => {
 
     const getBoards = () => document.querySelectorAll('.board');
 
-    const enableListener = (player) => getPlayerBoard(player).addEventListener('click', cellSelect);
-    const disableListener = (player) => getPlayerBoard(player).removeEventListener('click', cellSelect);
-
-    return { createBoard, updateBoard, enableListener, disableListener, updateCell, getBoards, generateShipContainer };
+    return { createBoard, updateBoard, updateCell, getBoards, generateShipContainer, getPlayerBoard };
 })();
 
 module.exports = webpage;
