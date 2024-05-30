@@ -57,6 +57,31 @@ const webpage = (() => {
         target.style.backgroundColor = result.hit ? 'green' : 'red';
     };
 
+    const generateShips = (shipContainer) => {
+        const ships = [
+            { id: 'ship-1', length: 5 },
+            { id: 'ship-2', length: 4 },
+            { id: 'ship-3', length: 3 },
+            { id: 'ship-4', length: 3 },
+            { id: 'ship-5', length: 2 }
+        ];
+
+        ships.forEach((ship) => {
+            const shipDiv = document.createElement('div');
+            shipDiv.className = 'ship horizontal';
+            shipDiv.id = ship.id;
+            shipDiv.setAttribute('draggable', 'true');
+            shipDiv.setAttribute('data-length', ship.length);
+            shipDiv.setAttribute('data-placed', 'false');
+            shipDiv.setAttribute('data-origin', 'none');
+            shipDiv.setAttribute('data-direction', 'horizontal');
+            shipDiv.style.width = `${ship.length * 40}px`;
+            shipContainer.appendChild(shipDiv);
+        });
+
+        return shipContainer;
+    };
+
     const generateShipContainer = () => {
         const shipContainer = document.createElement('div');
         shipContainer.className = 'ship-container';
@@ -66,7 +91,7 @@ const webpage = (() => {
         lockIn.innerHTML = 'LOCK IN'
         shipContainer.appendChild(lockIn)
 
-        document.body.appendChild(shipContainer);
+        document.body.appendChild(generateShips(shipContainer));
     };
 
     const getBoards = () => document.querySelectorAll('.board');

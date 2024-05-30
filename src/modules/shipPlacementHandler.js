@@ -1,37 +1,11 @@
 const { ship } = require('../index');
 const gameState = require('./gameState');
+const webpage = require('./webpage');
 
 const shipPlacementHandler = (() => {
     let currentHoveredCells = [];
     let placedShips = {};
     let activePlayer = null;
-
-    const generateShips = () => {
-        const ships = [
-            { id: 'ship-1', length: 5 },
-            { id: 'ship-2', length: 4 },
-            { id: 'ship-3', length: 3 },
-            { id: 'ship-4', length: 3 },
-            { id: 'ship-5', length: 2 }
-        ];
-
-        const shipContainer = document.querySelector('.ship-container');
-
-        ships.forEach((ship) => {
-            const shipDiv = document.createElement('div');
-            shipDiv.className = 'ship horizontal';
-            shipDiv.id = ship.id;
-            shipDiv.setAttribute('draggable', 'true');
-            shipDiv.setAttribute('data-length', ship.length);
-            shipDiv.setAttribute('data-placed', 'false');
-            shipDiv.setAttribute('data-origin', 'none');
-            shipDiv.setAttribute('data-direction', 'horizontal');
-            shipDiv.style.width = `${ship.length * 40}px`;
-            shipContainer.appendChild(shipDiv);
-        });
-
-        return shipContainer;
-    };
 
     const setupPlacements = (board) => {
         const ships = document.querySelectorAll('.ship');
@@ -158,6 +132,10 @@ const shipPlacementHandler = (() => {
         console.log(activePlayer.board);
     }
 
+    function clearShips() {
+        document.querySelector('.ship-container').innerHTML = ''
+    }
+
     function enableLockIn(board) {
         const lockIn = document.getElementById('lock-in');
         lockIn.addEventListener('click', () => {
@@ -168,7 +146,8 @@ const shipPlacementHandler = (() => {
             } else {
                 saveShipPlacements(ships);
                 board.setAttribute('data-setup-complete', 'true');
-                board.display = 'none'
+                board.style.display = 'none'
+                clearShips()
                 setupPlaceShips()
             }
         });
@@ -185,12 +164,12 @@ const shipPlacementHandler = (() => {
         const firstIncompleteBoard = getIncompleteBoard()
         if (!firstIncompleteBoard) return; //no more palcements start the game
         firstIncompleteBoard.style.display = 'grid';
-        generateShips();
+        webpage.generateShipContainer()
         setupPlacements(firstIncompleteBoard.querySelectorAll('.grid-cell'));
         enableLockIn(firstIncompleteBoard);
     };
 
-    return { generateShips, setupPlacements, enableLockIn, getIncompleteBoard, setupPlaceShips };
+    return {setupPlacements, enableLockIn, getIncompleteBoard, setupPlaceShips };
 })();
 
 module.exports = shipPlacementHandler;

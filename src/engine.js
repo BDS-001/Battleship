@@ -11,7 +11,6 @@ const setMode = (mode) => {
     gameState.initializePlayers(mode);
     webpage.createBoard(gameState.getPlayer('player1'));
     webpage.createBoard(gameState.getPlayer('player2'));
-    webpage.generateShipContainer();
     shipPlacementHandler.setupPlaceShips();
 };
 
