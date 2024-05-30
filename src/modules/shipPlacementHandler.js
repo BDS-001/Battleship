@@ -4,7 +4,7 @@ const gameState = require('./gameState');
 const shipPlacementHandler = (() => {
     let currentHoveredCells = [];
     let placedShips = {};
-    let activePlayer = null
+    let activePlayer = null;
 
     const generateShips = () => {
         const ships = [
@@ -24,8 +24,8 @@ const shipPlacementHandler = (() => {
             shipDiv.setAttribute('draggable', 'true');
             shipDiv.setAttribute('data-length', ship.length);
             shipDiv.setAttribute('data-placed', 'false');
-            shipDiv.setAttribute('origin', 'none');
-            shipDiv.setAttribute('direction', 'horizontal');
+            shipDiv.setAttribute('data-origin', 'none');
+            shipDiv.setAttribute('data-direction', 'horizontal');
             shipDiv.style.width = `${ship.length * 40}px`;
             shipContainer.appendChild(shipDiv);
         });
@@ -121,50 +121,63 @@ const shipPlacementHandler = (() => {
         ship.style.left = `${dropCell.getBoundingClientRect().left}px`;
         ship.style.top = `${dropCell.getBoundingClientRect().top}px`;
         ship.setAttribute('data-placed', 'true');
-        ship.setAttribute('origin', dropCell.dataset.location);
+        ship.setAttribute('data-origin', dropCell.dataset.location); // Corrected attribute name
+        ship.setAttribute('data-direction', 'horizontal'); // Set the direction as needed
     }
 
     const genCoordinates = (ship, origin, direction) => {
-        const coordinates = []
+        const coordinates = [];
         for (let i = 0; i < ship.length; i++) {
-          if (direction === 'horizontal') {
-            coordinates.push([origin[0], origin[1] + i])
-          }
-          if (direction === 'vertical') {
-            coordinates.push([origin[0] + i, origin[1]])
-          } 
+            if (direction === 'horizontal') {
+                coordinates.push([origin[0], origin[1] + i]);
+            } else if (direction === 'vertical') {
+                coordinates.push([origin[0] + i, origin[1]]);
+            }
         }
-        return coordinates
-    }
+        return coordinates;
+    };
 
     function saveShipPlacements(ships) {
         for (let i = 0; i < ships.length; i++) {
-            const placementShip = ships[i]
-            const gamePiece = ship(placementShip.dataset.length)
-            const coordinates = genCoordinates(gamePiece, placementShip.dataset.origin, placementShip.dataset.direction)
-            activePlayer.board.placeShip(gamePiece, coordinates)
+            const placementShip = ships[i];
+            console.log(placementShip); // Log the whole element to check the attributes
+    
+            // Ensure the data attributes are being accessed correctly
+            const length = parseInt(placementShip.getAttribute('data-length'));
+            const origin = placementShip.getAttribute('data-origin'); // Use getAttribute for debugging
+            const direction = placementShip.getAttribute('data-direction'); // Use getAttribute for debugging
+    
+            if (origin && direction) {
+                const gamePiece = ship(length);
+                console.log(gamePiece, JSON.parse(origin), direction);
+    
+                const coordinates = genCoordinates(gamePiece, JSON.parse(origin), direction);
+                activePlayer.board.placeShip(gamePiece, coordinates);
+            } else {
+                console.error('Origin or direction attribute is missing');
+            }
         }
-        console.log(activePlayer.board)
+        console.log(activePlayer.board);
     }
 
-    function enableLockIn () {
-        const lockIn = document.getElementById('lock-in')
+    function enableLockIn() {
+        const lockIn = document.getElementById('lock-in');
         lockIn.addEventListener('click', () => {
-            const ships = Array.from(document.querySelectorAll('.ship'))
-            const anyNonPlacedShip = Array.from(ships).some(ship => ship.dataset.placed === 'false');
-            if (anyNonPlacedShip ) {
-                alert('not all ships placed')
-            }  else {
-                saveShipPlacements(ships)
+            const ships = Array.from(document.querySelectorAll('.ship'));
+            const anyNonPlacedShip = ships.some(ship => ship.dataset.placed === 'false');
+            if (anyNonPlacedShip) {
+                alert('Not all ships placed');
+            } else {
+                saveShipPlacements(ships);
             }
-        })
+        });
     }
 
     function getIncompleteBoard() {
         const boards = document.querySelectorAll('.board');
         const firstIncompleteBoard = Array.from(boards).find((board) => board.dataset.setupComplete === 'false');
-        if (firstIncompleteBoard) activePlayer = gameState.getPlayer(firstIncompleteBoard.id)
-        return firstIncompleteBoard
+        if (firstIncompleteBoard) activePlayer = gameState.getPlayer(firstIncompleteBoard.id);
+        return firstIncompleteBoard;
     }
 
     return { generateShips, setupPlacements, enableLockIn, getIncompleteBoard };
