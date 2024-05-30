@@ -136,16 +136,14 @@ const shipPlacementHandler = (() => {
         }
         return coordinates;
     };
-
+  
     function saveShipPlacements(ships) {
         for (let i = 0; i < ships.length; i++) {
             const placementShip = ships[i];
-            console.log(placementShip); // Log the whole element to check the attributes
     
-            // Ensure the data attributes are being accessed correctly
             const length = parseInt(placementShip.getAttribute('data-length'));
-            const origin = placementShip.getAttribute('data-origin'); // Use getAttribute for debugging
-            const direction = placementShip.getAttribute('data-direction'); // Use getAttribute for debugging
+            const origin = placementShip.getAttribute('data-origin');
+            const direction = placementShip.getAttribute('data-direction');
     
             if (origin && direction) {
                 const gamePiece = ship(length);
@@ -160,7 +158,7 @@ const shipPlacementHandler = (() => {
         console.log(activePlayer.board);
     }
 
-    function enableLockIn() {
+    function enableLockIn(board) {
         const lockIn = document.getElementById('lock-in');
         lockIn.addEventListener('click', () => {
             const ships = Array.from(document.querySelectorAll('.ship'));
@@ -169,6 +167,9 @@ const shipPlacementHandler = (() => {
                 alert('Not all ships placed');
             } else {
                 saveShipPlacements(ships);
+                board.setAttribute('data-setup-complete', 'true');
+                board.display = 'none'
+                setupPlaceShips()
             }
         });
     }
@@ -180,7 +181,16 @@ const shipPlacementHandler = (() => {
         return firstIncompleteBoard;
     }
 
-    return { generateShips, setupPlacements, enableLockIn, getIncompleteBoard };
+    const setupPlaceShips = () => {
+        const firstIncompleteBoard = getIncompleteBoard()
+        if (!firstIncompleteBoard) return; //no more palcements start the game
+        firstIncompleteBoard.style.display = 'grid';
+        generateShips();
+        setupPlacements(firstIncompleteBoard.querySelectorAll('.grid-cell'));
+        enableLockIn(firstIncompleteBoard);
+    };
+
+    return { generateShips, setupPlacements, enableLockIn, getIncompleteBoard, setupPlaceShips };
 })();
 
 module.exports = shipPlacementHandler;

@@ -12,16 +12,7 @@ const setMode = (mode) => {
     webpage.createBoard(gameState.getPlayer('player1'));
     webpage.createBoard(gameState.getPlayer('player2'));
     webpage.generateShipContainer();
-    setupPlaceShips();
-};
-
-const setupPlaceShips = () => {
-    const firstIncompleteBoard = shipPlacementHandler.getIncompleteBoard()
-    if (!firstIncompleteBoard) return;
-    firstIncompleteBoard.style.display = 'grid';
-    shipPlacementHandler.generateShips();
-    shipPlacementHandler.setupPlacements(firstIncompleteBoard.querySelectorAll('.grid-cell'));
-    shipPlacementHandler.enableLockIn();
+    shipPlacementHandler.setupPlaceShips();
 };
 
 start();
