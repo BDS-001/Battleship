@@ -95,7 +95,7 @@ const gameState = (() => {
     function startGame() {
         document.querySelectorAll('.board').forEach(board => {
             board.style.display = 'grid'
-            if (board.id === 'player1') enableListener(player1)
+            if (board.id === 'player2') enableListener(player2)
         });
     }
 
