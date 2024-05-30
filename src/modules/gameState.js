@@ -79,7 +79,14 @@ const gameState = (() => {
         board.display = 'grid';
     };
 
-    return { getPlayer, updatePlayer, getOpponent, getCurrentPlayer, initializePlayers, placeShips };
+    function startGame() {
+        document.querySelectorAll('.board').forEach(board => {
+            board.style.display = 'grid'
+            if (board.id === 'player1') webpage.enableListener(player1)
+        });
+    }
+
+    return { getPlayer, updatePlayer, getOpponent, getCurrentPlayer, initializePlayers, placeShips, startGame };
 })();
 
 module.exports = gameState;

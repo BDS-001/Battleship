@@ -162,7 +162,7 @@ const shipPlacementHandler = (() => {
 
     const setupPlaceShips = () => {
         const firstIncompleteBoard = getIncompleteBoard()
-        if (!firstIncompleteBoard) return; //no more palcements start the game
+        if (!firstIncompleteBoard) return gameState.startGame() //no more palcements start the game
         firstIncompleteBoard.style.display = 'grid';
         webpage.generateShipContainer()
         setupPlacements(firstIncompleteBoard.querySelectorAll('.grid-cell'));
