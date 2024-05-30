@@ -210,6 +210,7 @@ const shipPlacementHandler = (() => {
             shipDiv.setAttribute('draggable', 'true');
             shipDiv.setAttribute('data-length', ship.length);
             shipDiv.setAttribute('data-placed', 'false');
+            shipDiv.setAttribute('origin', 'none');
             shipDiv.style.width = `${ship.length * 40}px`;
             shipContainer.appendChild(shipDiv);
         });
@@ -305,6 +306,7 @@ const shipPlacementHandler = (() => {
         ship.style.left = `${dropCell.getBoundingClientRect().left}px`;
         ship.style.top = `${dropCell.getBoundingClientRect().top}px`;
         ship.setAttribute('data-placed', 'true');
+        ship.setAttribute('origin', dropCell.dataset.location);
     }
 
     function saveShipPlacements() {
