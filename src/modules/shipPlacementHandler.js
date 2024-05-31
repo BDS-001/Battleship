@@ -7,14 +7,18 @@ const shipPlacementHandler = (() => {
     let placedShips = {};
     let activePlayer = null;
 
-    const setupPlacements = (board) => {
-        const ships = document.querySelectorAll('.ship');
-        board.forEach((cell) => {
-            cell.addEventListener('dragover', dragOver);
-            cell.addEventListener('dragleave', dragLeave);
-            cell.addEventListener('drop', drop);
+    const setupPlacements = () => {
+        const boards = document.querySelectorAll('.board');
+        boards.forEach((board) => {
+            const cells = board.querySelectorAll('.grid-cell');
+            cells.forEach((cell) => {
+                cell.addEventListener('dragover', (e) => dragOver(e, board));
+                cell.addEventListener('dragleave', (e) => dragLeave(e, board));
+                cell.addEventListener('drop', (e) => drop(e, board));
+            });
         });
 
+        const ships = document.querySelectorAll('.ship');
         ships.forEach((ship) => {
             ship.addEventListener('dragstart', dragStart);
         });
@@ -32,7 +36,7 @@ const shipPlacementHandler = (() => {
         e.dataTransfer.setData('text/plain', shipId);
     }
 
-    function dragOver(e) {
+    function dragOver(e, board) {
         e.preventDefault();
         const targetCell = e.target;
 
@@ -49,7 +53,7 @@ const shipPlacementHandler = (() => {
             if (cellIndex % 10 < startIndex % 10 || cellIndex >= 100) {
                 break;
             }
-            const cell = document.querySelector(`.grid-cell[data-index="${cellIndex}"]`);
+            const cell = board.querySelector(`.grid-cell[data-index="${cellIndex}"]`);
             if (cell) {
                 cell.style.backgroundColor = 'grey';
                 currentHoveredCells.push(cell);
@@ -57,12 +61,12 @@ const shipPlacementHandler = (() => {
         }
     }
 
-    function dragLeave(e) {
+    function dragLeave(e, board) {
         currentHoveredCells.forEach((cell) => (cell.style.backgroundColor = ''));
         currentHoveredCells = [];
     }
 
-    function drop(e) {
+    function drop(e, board) {
         e.preventDefault();
         currentHoveredCells.forEach((cell) => (cell.style.backgroundColor = ''));
         currentHoveredCells = [];
@@ -78,7 +82,7 @@ const shipPlacementHandler = (() => {
         }
 
         for (let i = 0; i < shipLength; i++) {
-            const cell = document.querySelector(`.grid-cell[data-index="${startIndex + i}"]`);
+            const cell = board.querySelector(`.grid-cell[data-index="${startIndex + i}"]`);
             if (cell.classList.contains('occupied')) {
                 return;
             }
@@ -86,7 +90,7 @@ const shipPlacementHandler = (() => {
 
         const newOccupiedCells = [];
         for (let i = 0; i < shipLength; i++) {
-            const cell = document.querySelector(`.grid-cell[data-index="${startIndex + i}"]`);
+            const cell = board.querySelector(`.grid-cell[data-index="${startIndex + i}"]`);
             cell.classList.add('occupied');
             newOccupiedCells.push(cell);
         }
@@ -110,30 +114,28 @@ const shipPlacementHandler = (() => {
         }
         return coordinates;
     };
-  
+
     function saveShipPlacements(ships) {
         for (let i = 0; i < ships.length; i++) {
             const placementShip = ships[i];
-    
+
             const length = parseInt(placementShip.getAttribute('data-length'));
             const origin = placementShip.getAttribute('data-origin');
             const direction = placementShip.getAttribute('data-direction');
-    
+
             if (origin && direction) {
                 const gamePiece = ship(length);
-                console.log(gamePiece, JSON.parse(origin), direction);
-    
+
                 const coordinates = genCoordinates(gamePiece, JSON.parse(origin), direction);
                 activePlayer.board.placeShip(gamePiece, coordinates);
             } else {
                 console.error('Origin or direction attribute is missing');
             }
         }
-        console.log(activePlayer.board);
     }
 
     function clearShips() {
-        document.querySelector('.ship-container').remove()
+        document.querySelector('.ship-container').remove();
     }
 
     function enableLockIn(board) {
@@ -147,8 +149,8 @@ const shipPlacementHandler = (() => {
                 saveShipPlacements(ships);
                 board.setAttribute('data-setup-complete', 'true');
                 board.style.display = 'none'
-                clearShips()
-                setupPlaceShips()
+                clearShips();
+                setupPlaceShips();
             }
         });
     }
@@ -161,15 +163,15 @@ const shipPlacementHandler = (() => {
     }
 
     const setupPlaceShips = () => {
-        const firstIncompleteBoard = getIncompleteBoard()
-        if (!firstIncompleteBoard) return gameState.startGame() //no more palcements start the game
+        const firstIncompleteBoard = getIncompleteBoard();
+        if (!firstIncompleteBoard) return gameState.startGame(); // no more placements, start the game
         firstIncompleteBoard.style.display = 'grid';
-        webpage.generateShipContainer()
-        setupPlacements(firstIncompleteBoard.querySelectorAll('.grid-cell'));
+        webpage.generateShipContainer();
+        setupPlacements();
         enableLockIn(firstIncompleteBoard);
     };
 
-    return {setupPlacements, enableLockIn, getIncompleteBoard, setupPlaceShips };
+    return { setupPlacements, enableLockIn, getIncompleteBoard, setupPlaceShips };
 })();
 
 module.exports = shipPlacementHandler;
