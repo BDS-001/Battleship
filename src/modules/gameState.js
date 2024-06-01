@@ -76,7 +76,7 @@ const gameState = (() => {
     const placeShips = (player) => {
         if (player.computer) return player.computer.placeShips();
         const board = webpage.getPlayerBoard(player);
-        board.display = 'grid';
+        board.style.display = 'grid';
     };
 
     const cellSelect = (event) => {

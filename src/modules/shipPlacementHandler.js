@@ -165,10 +165,17 @@ const shipPlacementHandler = (() => {
     const setupPlaceShips = () => {
         const firstIncompleteBoard = getIncompleteBoard();
         if (!firstIncompleteBoard) return gameState.startGame(); // no more placements, start the game
-        firstIncompleteBoard.style.display = 'grid';
-        webpage.generateShipContainer();
-        setupPlacements();
-        enableLockIn(firstIncompleteBoard);
+        const player = gameState.getPlayer(firstIncompleteBoard.id)
+        if (player.computer) {
+            player.computer.placeShips()
+            firstIncompleteBoard.setAttribute('data-setup-complete', 'true');
+            setupPlaceShips();
+        } else {
+            firstIncompleteBoard.style.display = 'grid';
+            webpage.generateShipContainer();
+            setupPlacements();
+            enableLockIn(firstIncompleteBoard);
+        }
     };
 
     return { setupPlacements, enableLockIn, getIncompleteBoard, setupPlaceShips };
