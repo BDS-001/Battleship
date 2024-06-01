@@ -1,6 +1,7 @@
 const menu = (() => {
     const modeSelect = (setMode) => (event) => {
         document.body.innerHTML = '';
+        document.body.style.backgroundImage = 'none';
         setMode(event.target.dataset.mode);
     };
 
