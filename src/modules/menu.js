@@ -11,10 +11,12 @@ const menu = (() => {
         const solo = document.createElement('button');
         const vs = document.createElement('button');
 
-        solo.innerHTML = 'solo';
-        vs.innerHTML = 'vs';
         solo.dataset.mode = 'solo';
         vs.dataset.mode = 'vs';
+        solo.className = 'mode-select'
+        solo.id = 'solo-mode'
+        vs.className = 'mode-select'
+        vs.id = 'vs-mode'
 
         solo.addEventListener('click', modeSelect(setMode));
         vs.addEventListener('click', modeSelect(setMode));
