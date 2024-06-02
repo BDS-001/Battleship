@@ -24,6 +24,13 @@ const shipPlacementHandler = (() => {
         });
     };
 
+    function rotateShip(e) {
+        console.log('working')
+        if (e.key === 'R' || e.key === 'r') {
+            console.log(e.target.dataset.direction)
+        }
+    }
+
     function dragStart(e) {
         const shipId = e.target.id;
         if (placedShips[shipId]) {
@@ -34,6 +41,7 @@ const shipPlacementHandler = (() => {
             placedShips[shipId] = [];
         }
         e.dataTransfer.setData('text/plain', shipId);
+        console.log(e.target)
     }
 
     function dragOver(e, board) {
@@ -177,6 +185,8 @@ const shipPlacementHandler = (() => {
             enableLockIn(firstIncompleteBoard);
         }
     };
+
+    document.addEventListener('keydown', rotateShip)
 
     return { setupPlacements, enableLockIn, getIncompleteBoard, setupPlaceShips };
 })();
