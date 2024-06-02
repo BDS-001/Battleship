@@ -21,13 +21,24 @@ const shipPlacementHandler = (() => {
         const ships = document.querySelectorAll('.ship');
         ships.forEach((ship) => {
             ship.addEventListener('dragstart', dragStart);
+            ship.addEventListener('drag', drag);
         });
     };
 
-    function rotateShip(e) {
-        console.log('working')
-        if (e.key === 'R' || e.key === 'r') {
-            console.log(e.target.dataset.direction)
+    function drag(event) {
+        if (event.altKey) {
+            console.log('Option/Alt key pressed while dragging');
+            // Add your action here for Option/Alt key
+        }
+
+        if (event.ctrlKey) {
+            console.log('Control key pressed while dragging');
+            // Add your action here for Control key
+        }
+
+        if (event.shiftKey) {
+            console.log('Shift key pressed while dragging');
+            // Add your action here for Control key
         }
     }
 
@@ -41,7 +52,6 @@ const shipPlacementHandler = (() => {
             placedShips[shipId] = [];
         }
         e.dataTransfer.setData('text/plain', shipId);
-        console.log(e.target)
     }
 
     function dragOver(e, board) {
@@ -185,8 +195,6 @@ const shipPlacementHandler = (() => {
             enableLockIn(firstIncompleteBoard);
         }
     };
-
-    document.addEventListener('keydown', rotateShip)
 
     return { setupPlacements, enableLockIn, getIncompleteBoard, setupPlaceShips };
 })();
