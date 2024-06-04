@@ -25,21 +25,21 @@ const shipPlacementHandler = (() => {
         });
     };
 
-    function drag(event) {
-        if (event.altKey) {
+    function rotateShip(e) {
+        if (e.altKey) {
             console.log('Option/Alt key pressed while dragging');
-            // Add your action here for Option/Alt key
+            e.target.setAttribute('data-direction', 'horizontal');
         }
 
-        if (event.ctrlKey) {
+        if (e.ctrlKey) {
             console.log('Control key pressed while dragging');
-            // Add your action here for Control key
+            e.target.setAttribute('data-direction', 'vertical')
         }
 
-        if (event.shiftKey) {
-            console.log('Shift key pressed while dragging');
-            // Add your action here for Control key
-        }
+    }
+
+    function drag(event) {
+        rotateShip(event)
     }
 
     function dragStart(e) {
@@ -118,7 +118,7 @@ const shipPlacementHandler = (() => {
         ship.style.top = `${dropCell.getBoundingClientRect().top}px`;
         ship.setAttribute('data-placed', 'true');
         ship.setAttribute('data-origin', dropCell.dataset.location); // Corrected attribute name
-        ship.setAttribute('data-direction', 'horizontal'); // Set the direction as needed
+        //ship.setAttribute('data-direction', 'horizontal'); // Set the direction as needed
     }
 
     const genCoordinates = (ship, origin, direction) => {
