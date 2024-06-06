@@ -26,14 +26,23 @@ const shipPlacementHandler = (() => {
     };
 
     function rotateShip(e) {
+        const ship = e.target
         if (e.altKey) {
             console.log('Option/Alt key pressed while dragging');
-            e.target.setAttribute('data-direction', 'horizontal');
+            ship.setAttribute('data-direction', 'horizontal');
+            if (ship.classList.contains('vertical')) {
+                ship.classList.remove('vertical');
+                ship.classList.add('horizontal');
+            }
         }
 
         if (e.ctrlKey) {
             console.log('Control key pressed while dragging');
-            e.target.setAttribute('data-direction', 'vertical')
+            ship.setAttribute('data-direction', 'vertical')
+            if (ship.classList.contains('horizontal')) {
+                ship.classList.remove('horizontal');
+                ship.classList.add('vertical');
+            }
         }
 
     }
