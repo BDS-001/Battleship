@@ -68,10 +68,19 @@ const shipPlacementHandler = (() => {
         const startIndex = parseInt(targetCell.dataset.index);
 
         for (let i = 0; i < shipLength; i++) {
-            const cellIndex = startIndex + i;
-            if (cellIndex % 10 < startIndex % 10 || cellIndex >= 100) {
-                break;
+            let cellIndex = null
+            if (ship.getAttribute('data-direction') === 'horizontal') {
+                cellIndex = startIndex + i;
+                if (cellIndex % 10 < startIndex % 10 || cellIndex >= 100) {
+                    break;
+                }
+            } else if (ship.getAttribute('data-direction') === 'vertical') {
+                cellIndex = startIndex + (i * 10);
+                if (cellIndex < 0 || cellIndex >= 100) {
+                    break;
+                }
             }
+
             const cell = board.querySelector(`.grid-cell[data-index="${cellIndex}"]`);
             if (cell) {
                 cell.style.backgroundColor = 'grey';

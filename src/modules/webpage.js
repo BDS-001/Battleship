@@ -12,6 +12,9 @@ const webpage = (() => {
         let col = 0;
         for (let i = 0; i < 100; i++) {
             const cell = document.createElement('div');
+            //**************** */
+            cell.innerHTML = i
+            //*******************/
             const location = [row, col];
             if (col >= 9) {
                 row++;
