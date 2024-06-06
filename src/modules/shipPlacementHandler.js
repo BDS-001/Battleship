@@ -30,19 +30,11 @@ const shipPlacementHandler = (() => {
         if (e.altKey) {
             console.log('Option/Alt key pressed while dragging');
             ship.setAttribute('data-direction', 'horizontal');
-            if (ship.classList.contains('vertical')) {
-                ship.classList.remove('vertical');
-                ship.classList.add('horizontal');
-            }
         }
 
         if (e.ctrlKey) {
             console.log('Control key pressed while dragging');
             ship.setAttribute('data-direction', 'vertical')
-            if (ship.classList.contains('horizontal')) {
-                ship.classList.remove('horizontal');
-                ship.classList.add('vertical');
-            }
         }
 
     }
@@ -102,6 +94,7 @@ const shipPlacementHandler = (() => {
         const ship = document.getElementById(shipId);
         const dropCell = e.target;
         const startIndex = parseInt(dropCell.dataset.index);
+        const currentDirection = ship.getAttribute('data-direction');
 
         const shipLength = parseInt(ship.dataset.length);
         if (startIndex % 10 + shipLength > 10) {
@@ -128,6 +121,14 @@ const shipPlacementHandler = (() => {
         ship.setAttribute('data-placed', 'true');
         ship.setAttribute('data-origin', dropCell.dataset.location); // Corrected attribute name
         //ship.setAttribute('data-direction', 'horizontal'); // Set the direction as needed
+        ship.getAttribute('data-direction')
+        if (ship.classList.contains('horizontal') && currentDirection === 'vertical') {
+            ship.classList.remove('horizontal');
+            ship.classList.add('vertical');
+        } else if (ship.classList.contains('vertical') && currentDirection === 'horizontal') {
+            ship.classList.remove('vertical');
+            ship.classList.add('horizontal');
+        }
     }
 
     const genCoordinates = (ship, origin, direction) => {

@@ -44,6 +44,11 @@ body {
   background-repeat: no-repeat;
 }
 
+.vertical {
+  transform: rotate(90deg);
+  transform-origin: center;
+}
+
 body {
   margin: 0;
   padding: 0;
