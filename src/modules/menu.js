@@ -7,7 +7,6 @@ const menu = (() => {
 
     const generateMenu = (setMode) => {
         const body = document.querySelector('body');
-        body.innerHTML = '';
 
         const solo = document.createElement('button');
         const vs = document.createElement('button');

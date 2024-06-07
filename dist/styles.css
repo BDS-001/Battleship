@@ -8,10 +8,11 @@ body {
     padding: 20px;
     background-color: #00003d;
     height: 100vh;
-    background-image: url('../src/assets/images/sampletitlescreen2.png');
+    background-image: url('../src/assets/images/backgroundimg.png');
   
     background-position: center;
     background-repeat: no-repeat;
+    background-size: cover;
   }
   
   #board {
