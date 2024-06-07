@@ -43,15 +43,18 @@ body {
   justify-content: center;
   align-items: center;
   cursor: grab;
-  background-image: url(../src/assets/images/ship.png);
+
   background-size: contain;
   background-position: center;
   background-repeat: no-repeat;
 }
 
+.horizontal {
+  background-image: url(../src/assets/images/ship.png);
+}
+
 .vertical {
-  transform: rotate(90deg);
-  transform-origin: center;
+  background-image: url(../src/assets/images/ship-v.png);
 }
 
 #solo-mode {
