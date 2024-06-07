@@ -105,32 +105,54 @@ const shipPlacementHandler = (() => {
         const startIndex = parseInt(dropCell.dataset.index);
         const currentDirection = ship.getAttribute('data-direction');
 
+        //check for board overflow
         const shipLength = parseInt(ship.dataset.length);
-        if (startIndex % 10 + shipLength > 10) {
-            return;
+        if ((currentDirection === 'horizontal' && startIndex % 10 + shipLength > 10) ||
+        (currentDirection === 'vertical' && startIndex + (10 * (shipLength - 1)) >= 100) ||
+        startIndex < 0 || startIndex > 99) {
+        return;
         }
+    
 
+        //check if cells are already occupied
         for (let i = 0; i < shipLength; i++) {
-            const cell = board.querySelector(`.grid-cell[data-index="${startIndex + i}"]`);
+            const calculatedIndex = currentDirection === 'horizontal' ? startIndex + i : startIndex + (10 * i)
+            const cell = board.querySelector(`.grid-cell[data-index="${calculatedIndex}"]`);
             if (cell.classList.contains('occupied')) {
                 return;
             }
         }
 
+        //update new occupied cells
         const newOccupiedCells = [];
         for (let i = 0; i < shipLength; i++) {
-            const cell = board.querySelector(`.grid-cell[data-index="${startIndex + i}"]`);
+            const calculatedIndex = currentDirection === 'horizontal' ? startIndex + i : startIndex + (10 * i)
+            const cell = board.querySelector(`.grid-cell[data-index="${calculatedIndex}"]`);
             cell.classList.add('occupied');
             newOccupiedCells.push(cell);
         }
+
         placedShips[shipId] = newOccupiedCells;
+
+        // Adjust ship position
+        const dropCellRect = dropCell.getBoundingClientRect();
         ship.style.position = 'absolute';
-        ship.style.left = `${dropCell.getBoundingClientRect().left}px`;
-        ship.style.top = `${dropCell.getBoundingClientRect().top}px`;
+        ship.style.left = `${dropCellRect.left}px`;
+        ship.style.top = `${dropCellRect.top}px`;
+
+        // Adjust ship dimensions and orientation
+        if (currentDirection === 'horizontal') {
+            ship.style.width = `${dropCellRect.width * shipLength}px`;
+            ship.style.height = `${dropCellRect.height}px`;
+        } else if (currentDirection === 'vertical') {
+            ship.style.width = `${dropCellRect.width}px`;
+            ship.style.height = `${dropCellRect.height * shipLength}px`;
+        }
+
+
         ship.setAttribute('data-placed', 'true');
         ship.setAttribute('data-origin', dropCell.dataset.location); // Corrected attribute name
-        //ship.setAttribute('data-direction', 'horizontal'); // Set the direction as needed
-        ship.getAttribute('data-direction')
+
         if (ship.classList.contains('horizontal') && currentDirection === 'vertical') {
             ship.classList.remove('horizontal');
             ship.classList.add('vertical');
