@@ -49,21 +49,20 @@ const gameState = (() => {
             return res;
         }
 
-        if (currentOpponent.computer) {
-            handleAI(currentOpponent, currentPlayer);
-        } else {
-            changeTurn();
-        }
-
         return res;
     };
 
     const handleAI = (computerPlayer, currentPlayer) => {
         const { result, move } = computerPlayer.computer.playMove(currentPlayer);
+        console.log(result, move)
         webpage.updateCell(currentPlayer, move, result);
 
         if (result.status === 'retry') {
             return result;
+        }
+
+        if (result.sunk) {
+            alert(`${currentPlayer.name}'s ship has sunk`)
         }
 
         if (checkWin(currentPlayer)) {
@@ -85,6 +84,15 @@ const gameState = (() => {
             const result = updatePlayer(getOpponent(), location);
             if (result.status != 'retry') {
                 event.target.style.backgroundColor = result.hit ? 'green' : 'red';
+            }
+            if (result.sunk) {
+                alert(`${currentOpponent.name}'s ship has sunk`)
+            }
+
+            if (currentOpponent.computer) {
+                handleAI(currentOpponent, currentPlayer);
+            } else {
+                changeTurn();
             }
         }
     };

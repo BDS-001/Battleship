@@ -93,7 +93,7 @@ const computer = (board) => {
     do {
       move = selectMove();
       result = opposingPlayer.board.receiveAttack(move);
-    } while (result === "retry");
+    } while (result.status === "retry");
 
     return { result, move };
   };
