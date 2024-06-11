@@ -25,8 +25,12 @@ const gameState = (() => {
     const changeTurn = () => {
         currentPlayer = currentPlayer === player1 ? player2 : player1;
         currentOpponent = currentOpponent === player1 ? player2 : player1;
+
         disableListener(currentPlayer);
+        webpage.getPlayerBoard(currentPlayer).style.display = 'none'
+        
         enableListener(currentOpponent);
+        webpage.getPlayerBoard(currentOpponent).style.display = 'grid'
     };
 
     const checkWin = (player) => {
@@ -102,10 +106,8 @@ const gameState = (() => {
 
     function startGame() {
         webpage.removeOccupied()
-        document.querySelectorAll('.board').forEach(board => {
-            board.style.display = 'grid'
-            if (board.id === 'player2') enableListener(player2)
-        });
+        webpage.getPlayerBoard(player2).style.display = 'grid'
+        enableListener(player2)
     }
 
     return { getPlayer, updatePlayer, getOpponent, getCurrentPlayer, initializePlayers, placeShips, startGame, enableListener, disableListener };
