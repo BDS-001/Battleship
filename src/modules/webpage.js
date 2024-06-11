@@ -43,6 +43,16 @@ const webpage = (() => {
         }
     };
 
+    const removeOccupied = () => {
+        const boards = document.querySelectorAll('.board')
+        boards.forEach(board => {
+            board = board.querySelectorAll('.grid-cell');
+            for (let cell = 0; cell < 100; cell++) {
+                board[cell].classList.remove('occupied')
+            } 
+        });
+    }
+
     const updateCell = (player, move, result) => {
         const target = getPlayerBoard(player).querySelector(`.grid-cell[data-location='${JSON.stringify(move)}']`);
         target.style.backgroundColor = result.hit ? 'green' : 'red';
@@ -87,7 +97,7 @@ const webpage = (() => {
 
     const getBoards = () => document.querySelectorAll('.board');
 
-    return { createBoard, updateBoard, updateCell, getBoards, generateShipContainer, getPlayerBoard };
+    return { createBoard, updateBoard, updateCell, getBoards, generateShipContainer, getPlayerBoard, removeOccupied };
 })();
 
 module.exports = webpage;

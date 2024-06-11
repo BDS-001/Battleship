@@ -101,6 +101,7 @@ const gameState = (() => {
     const disableListener = (player) => webpage.getPlayerBoard(player).removeEventListener('click', cellSelect);
 
     function startGame() {
+        webpage.removeOccupied()
         document.querySelectorAll('.board').forEach(board => {
             board.style.display = 'grid'
             if (board.id === 'player2') enableListener(player2)
