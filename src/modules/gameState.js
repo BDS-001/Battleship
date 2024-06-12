@@ -108,6 +108,7 @@ const gameState = (() => {
         webpage.removeOccupied()
         webpage.getPlayerBoard(player2).style.display = 'grid'
         enableListener(player2)
+        if (!player2.computer) webpage.generateOverlay()
     }
 
     return { getPlayer, updatePlayer, getOpponent, getCurrentPlayer, initializePlayers, placeShips, startGame, enableListener, disableListener };

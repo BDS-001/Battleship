@@ -113,4 +113,39 @@ body {
   transform: translateY(2px); /* Slightly move down on click */
 }
 
+#overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000; /* Make sure it's on top of everything */
+}
+
+#reveal-button {
+  background-color: #FF851B; /* Darker orange background for contrast */
+  color: white; /* White text */
+  border: 2px solid #ffffff; /* White border for better visibility */
+  padding: 15px 30px; /* Add some padding */
+  font-size: 16px; /* Set font size */
+  font-weight: bold; /* Make the text bold */
+  text-align: center; /* Center the text */
+  border-radius: 8px; /* Rounded corners */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Add a slight shadow for 3D effect */
+  cursor: pointer; /* Pointer cursor on hover */
+  transition: background-color 0.3s, box-shadow 0.3s, transform 0.3s;
+}
+
+#reveal-button:hover {
+  background-color: #cc6a17; /* Slightly darker orange on hover */
+}
+
+#reveal-button:active {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Deeper shadow when active */
+  transform: translateY(2px); /* Slightly move down on click */
+}
 

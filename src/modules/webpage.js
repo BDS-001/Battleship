@@ -95,9 +95,32 @@ const webpage = (() => {
         document.body.appendChild(generateShips(shipContainer));
     };
 
+    const generateOverlay = () => {
+        // Create overlay element
+        const overlay = document.createElement('div');
+        overlay.id = 'overlay';
+
+        // Create button element
+        const button = document.createElement('button');
+        button.id = 'reveal-button';
+        button.innerText = 'Reveal Webpage';
+
+        // Add click event to remove overlay
+        button.addEventListener('click', function() {
+            overlay.style.display = 'none';
+        });
+
+        // Append button to overlay
+        overlay.appendChild(button);
+
+        // Append overlay to body or specific container
+        document.body.appendChild(overlay);
+
+    }
+
     const getBoards = () => document.querySelectorAll('.board');
 
-    return { createBoard, updateBoard, updateCell, getBoards, generateShipContainer, getPlayerBoard, removeOccupied };
+    return { createBoard, updateBoard, updateCell, getBoards, generateShipContainer, getPlayerBoard, removeOccupied, generateOverlay };
 })();
 
 module.exports = webpage;
