@@ -6,7 +6,7 @@ body {
     gap: 20px;
     align-items: center;
     padding: 20px;
-    background-color: #00003d;
+    background-color: #37364e;
     height: 100vh;
     background-image: url('../src/assets/images/backgroundimg.png');
   
@@ -23,12 +23,12 @@ body {
 }
 
 .grid-cell {
-  background-color: lightblue;
+  background-color: #6aae9d;
 }
 
 .grid-cell:hover {
   cursor: pointer;
-  background-color: lightgray;
+  background-color: #355d69;
 }
 
 #ship-container {
@@ -79,3 +79,38 @@ body {
 .mode-select:active {
   transform: scale(0.9);
 }
+
+#lock-in {
+  background-color: #bf5f5f; /* Darker orange background for contrast */
+  color: white; /* White text */
+  border: 2px solid #ffffff; /* White border for better visibility */
+  padding: 15px 30px; /* Add some padding */
+  font-size: 16px; /* Set font size */
+  font-weight: bold; /* Make the text bold */
+  text-align: center; /* Center the text */
+  border-radius: 8px; /* Rounded corners */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Add a slight shadow for 3D effect */
+  cursor: pointer; /* Pointer cursor on hover */
+  position: relative; /* Relative position for the anchor icon */
+  background-image: url('path/to/wave-pattern.png'); /* Background wave pattern */
+  background-size: cover; /* Ensure the wave pattern covers the button */
+}
+
+#lock-in::before {
+  content: url('path/to/anchor-icon.png'); /* Anchor icon */
+  position: absolute; /* Absolute position to place it correctly */
+  left: 10px; /* Position it to the left inside the button */
+  top: 50%; /* Center vertically */
+  transform: translateY(-50%); /* Correct vertical alignment */
+}
+
+#lock-in:hover {
+  background-color: #cc6a17; /* Slightly darker orange on hover */
+}
+
+#lock-in:active {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Deeper shadow when active */
+  transform: translateY(2px); /* Slightly move down on click */
+}
+
+

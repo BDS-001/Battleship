@@ -13,7 +13,7 @@ const webpage = (() => {
         for (let i = 0; i < 100; i++) {
             const cell = document.createElement('div');
             //**************** */
-            cell.innerHTML = i
+            // cell.innerHTML = i
             //*******************/
             const location = [row, col];
             if (col >= 9) {
@@ -25,7 +25,7 @@ const webpage = (() => {
             cell.dataset.location = JSON.stringify(location);
             cell.dataset.index = i;
             cell.className = 'grid-cell';
-            cell.style.border = '1px solid darkblue';
+            cell.style.border = '1px solid #b9d4b4';
             board.appendChild(cell);
         }
         document.body.append(board);

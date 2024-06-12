@@ -83,7 +83,7 @@ const shipPlacementHandler = (() => {
 
             const cell = board.querySelector(`.grid-cell[data-index="${cellIndex}"]`);
             if (cell) {
-                cell.style.backgroundColor = 'grey';
+                cell.style.backgroundColor = '#355d69';
                 currentHoveredCells.push(cell);
             }
         }
