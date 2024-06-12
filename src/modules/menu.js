@@ -8,9 +8,11 @@ const menu = (() => {
     const generateMenu = (setMode) => {
         const body = document.querySelector('body');
 
-        const solo = document.createElement('button');
-        const vs = document.createElement('button');
+        const solo = document.createElement('img');
+        const vs = document.createElement('img');
 
+        solo.src = '../src/assets/images/solomode.png'
+        vs.src = '../src/assets/images/vsmode.png'
         solo.dataset.mode = 'solo';
         vs.dataset.mode = 'vs';
         solo.className = 'mode-select'
