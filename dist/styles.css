@@ -1,25 +1,25 @@
 body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    align-items: center;
-    padding: 20px;
-    background-color: #37364e;
-    height: 100vh;
-    background-image: url('../src/assets/images/backgroundimg.png');
-  
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
+  margin: 0;
+  font-family: Arial, sans-serif;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  align-items: center;
+  padding: 20px;
+  background-color: #37364e;
+  height: 100vh;
+  background-image: url('');
+
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
   }
   
-  #board {
-    display: grid;
-    grid-template-columns: repeat(10, 1fr);
-    padding: 1px;
-    margin-top: 100px;
+#board {
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  padding: 1px;
+  margin-top: 100px;
 }
 
 .grid-cell {
@@ -58,6 +58,16 @@ body {
   background-image: url(../src/assets/images/ship-v.png);
 }
 
+#solo-mode {
+  background-color: #d17b73; /* Solid color for Solo Mode */
+  color: white; /* White text */
+}
+
+#vs-mode {
+  background-color: #87d1ef; /* Solid color for VS Mode */
+  color: white; /* White text */
+}
+
 .mode-select {
   width: 300px; /* Adjust to your image size */
   height: 150px; /* Adjust to your image size */
@@ -68,17 +78,37 @@ body {
   border: none;
   cursor: pointer;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
+  font-size: 20px; /* Add font size for text */
+  font-weight: bold; /* Add font weight for text */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 2px solid #ffffff; /* White border for better visibility */
+  padding: 15px 30px; /* Add some padding */
+  border-radius: 8px; /* Rounded corners */
 }
 
 /* Hover effect */
-.mode-select:hover {
-  transform: scale(1.1);
+#solo-mode:hover {
+  background-color: #bf5f5f; /* Hover color for Solo Mode */
+}
+
+#vs-mode:hover {
+  background-color: #64a1c2; /* Hover color for VS Mode */
 }
 
 /* Active (click) effect */
-.mode-select:active {
+#solo-mode:active {
+  background-color: #a55550; /* Active color for Solo Mode */
   transform: scale(0.9);
 }
+
+#vs-mode:active {
+  background-color: #4d8ea1; /* Active color for VS Mode */
+  transform: scale(0.9);
+}
+
+
 
 #lock-in {
   background-color: #bf5f5f; /* Darker orange background for contrast */
@@ -92,12 +122,10 @@ body {
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Add a slight shadow for 3D effect */
   cursor: pointer; /* Pointer cursor on hover */
   position: relative; /* Relative position for the anchor icon */
-  background-image: url('path/to/wave-pattern.png'); /* Background wave pattern */
   background-size: cover; /* Ensure the wave pattern covers the button */
 }
 
 #lock-in::before {
-  content: url('path/to/anchor-icon.png'); /* Anchor icon */
   position: absolute; /* Absolute position to place it correctly */
   left: 10px; /* Position it to the left inside the button */
   top: 50%; /* Center vertically */
@@ -105,12 +133,12 @@ body {
 }
 
 #lock-in:hover {
-  background-color: #cc6a17; /* Slightly darker orange on hover */
+  background-color: #cc6a17;
 }
 
 #lock-in:active {
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Deeper shadow when active */
-  transform: translateY(2px); /* Slightly move down on click */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  transform: translateY(2px);
 }
 
 #overlay {
@@ -123,29 +151,29 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1000; /* Make sure it's on top of everything */
+  z-index: 1000;
 }
 
 #reveal-button {
-  background-color: #FF851B; /* Darker orange background for contrast */
-  color: white; /* White text */
-  border: 2px solid #ffffff; /* White border for better visibility */
-  padding: 15px 30px; /* Add some padding */
-  font-size: 16px; /* Set font size */
-  font-weight: bold; /* Make the text bold */
-  text-align: center; /* Center the text */
-  border-radius: 8px; /* Rounded corners */
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Add a slight shadow for 3D effect */
-  cursor: pointer; /* Pointer cursor on hover */
+  background-color: #FF851B; 
+  color: white; 
+  border: 2px solid #ffffff;
+  padding: 15px 30px; 
+  font-size: 16px;
+  font-weight: bold; 
+  text-align: center; 
+  border-radius: 8px; 
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
+  cursor: pointer;
   transition: background-color 0.3s, box-shadow 0.3s, transform 0.3s;
 }
 
 #reveal-button:hover {
-  background-color: #cc6a17; /* Slightly darker orange on hover */
+  background-color: #cc6a17;
 }
 
 #reveal-button:active {
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Deeper shadow when active */
-  transform: translateY(2px); /* Slightly move down on click */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  transform: translateY(2px);
 }
 
