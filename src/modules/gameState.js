@@ -58,7 +58,6 @@ const gameState = (() => {
 
     const handleAI = (computerPlayer, currentPlayer) => {
         const { result, move } = computerPlayer.computer.playMove(currentPlayer);
-        console.log(result, move)
         webpage.updateCell(currentPlayer, move, result);
 
         if (result.status === 'retry') {

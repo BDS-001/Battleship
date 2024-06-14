@@ -47,20 +47,29 @@ const gameBoard = () => {
     return false
   }
 
+  const validAttack = (coordinates) => {
+    const row = location[0];
+    const col = location[1];
+    
+    if (row >= 10 || col >= 10 || row < 0 || col < 0) return false
+    return true
+  }
+
   const receiveAttack = (coordinates) => {
+    if (!validAttack(coordinates)) return { status: 'retry', hit: null, sunk: null, ship:null };
     const location = board[coordinates[0]][coordinates[1]];
     
     if (location.hit != null) {
-      return { status: 'retry', hit: null, sunk: null };
+      return { status: 'retry', hit: null, sunk: null, ship:null };
     }
     
     if (location.ship) {
       location.hit = true;
       location.ship.hit();
-      return { status: 'success', hit: true, sunk: location.ship.isSunk() };
+      return { status: 'success', hit: true, sunk: location.ship.isSunk(), ship:location.ship };
     } else {
       location.hit = false;
-      return { status: 'success', hit: false, sunk: false };
+      return { status: 'success', hit: false, sunk: false,ship:null };
     }
   };
   
@@ -80,21 +89,61 @@ const player = (playerName, cpu = null) => {
 }
 
 const computer = (board) => {
-  const previousMove = null;
-  let cache = {ship:null, coordinates:null, left:null, right:null, up:null, down:null, horizontal:null, vertical:null, hits:[]}
+  let cache
+  const directions = [
+    { key: 'left', move: [0, -1], cacheKey: 'horizontal' },
+    { key: 'up', move: [-1, 0], cacheKey: 'vertical' },
+    { key: 'right', move: [0, 1], cacheKey: 'horizontal' },
+    { key: 'down', move: [1, 0], cacheKey: 'vertical' }
+  ];
 
-  const resetCache = () => {
-    cache = {ship:null, coordinates:null, left:null, right:null, up:null, down:null, horizontal:null, vertical:null, hits:[]}
+  const setCache = () => {
+    cache = {ship:null, origin:null,  left:null, right:null, up:null, down:null, horizontal:{active:null, left:null, right:null}, vertical:{active:null, up:null, down:null}}
   }
 
   const selectMove = () => {
     return [Math.floor(Math.random() * 10), Math.floor(Math.random() * 10)];
   };
 
-  function smartSelectMove() {
-    //if horizontal has been determined, go left until miss then go right untill hit
-    //if vertical has been determined, go left until miss then go right untill hit
-    //else check for direction using left, up, right, down
+  function smartSelectMove(opposingPlayer) {
+    let result;
+    let move;
+
+    //no active hit
+    if (!cache.ship) {
+      do {
+        move = selectMove();
+        result = opposingPlayer.board.receiveAttack(move);
+      } while (result.status === "retry");
+
+      return { result, move };
+    }
+
+    if (cache.horizontal.active) {
+      //if horizontal has been determined, go left until miss then go right untill hit
+
+    } else if(cache.vertical.active) {
+      //if vertical has been determined, go left until miss then go right untill hit
+
+    } else {
+      // find ship direction
+      do {
+        for (let i = 0; i < directions.length; i++) {
+          const direction = directions[i]
+          if (!cache[direction.key]) {
+            const move = [cache.origin[0] + direction.move[0], cache.origin[1] + direction.move[1]];
+            const result = opposingPlayer.board.receiveAttack(move);
+            cache[direction.key] = true;
+            if (result.status === 'success' && result.hit) {
+              cache[direction.cacheKey].active = true;
+            }
+            break
+          }
+        }
+      } while (result.status === 'retry' )
+    }
+
+    return { result, move };
   }
 
   const playMove = (opposingPlayer) => {
@@ -133,11 +182,11 @@ const computer = (board) => {
         const coordinates = genCoordinates(ship, origin, direction)
 
         placed = board.placeShip(ship, coordinates);
-        console.log(placed)
       }
-      console.log(board)
     });
   }
+
+  setCache()
 
   return { selectMove, playMove, placeShips, genCoordinates};
 };

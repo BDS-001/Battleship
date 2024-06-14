@@ -28,12 +28,10 @@ const shipPlacementHandler = (() => {
     function rotateShip(e) {
         const ship = e.target
         if (e.altKey) {
-            console.log('Option/Alt key pressed while dragging');
             ship.setAttribute('data-direction', 'horizontal');
         }
 
         if (e.ctrlKey) {
-            console.log('Control key pressed while dragging');
             ship.setAttribute('data-direction', 'vertical')
         }
 
