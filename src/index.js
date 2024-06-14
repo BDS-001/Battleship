@@ -60,7 +60,7 @@ const gameBoard = () => {
     const location = board[coordinates[0]][coordinates[1]];
     
     if (location.hit != null) {
-      return { status: 'retry', hit: null, sunk: null, ship:null };
+      return { status: 'retry', hit: null, sunk: null, ship:location.ship };
     }
     
     if (location.ship) {
@@ -157,7 +157,6 @@ const computer = (board) => {
       if (result.hit) {
         cache.origin = move
         cache.ship = result.ship
-        console.log(result, result.ship)
       }
       return { result, move };
     }
@@ -167,9 +166,9 @@ const computer = (board) => {
       do {
         if (!cache.horizontal.left) {
           move = [cache.origin[0], cache.origin[1] - cache.factor]
-          console.log(move)
           cache.factor = cache.factor + 1
           result = opposingPlayer.board.receiveAttack(move);
+          console.log(result, cache.ship, result.ship, 'left')
           if (cache.ship != result.ship) {
             cache.horizontal.left = true
             cache.factor = 1
@@ -178,12 +177,12 @@ const computer = (board) => {
           move = [cache.origin[0], cache.origin[1] + cache.factor]
           cache.factor = cache.factor + 1
           result = opposingPlayer.board.receiveAttack(move);
+          console.log(result, cache.ship, result.ship, 'right')
           if (cache.ship != result.ship) {
             cache.horizontal.right = true
             cache.factor = 1
           }
         }
-
       } while (result.status === 'retry' )
 
     } else if(cache.vertical.active) {
@@ -193,20 +192,21 @@ const computer = (board) => {
           move = [cache.origin[0] - cache.factor, cache.origin[1]]
           cache.factor = cache.factor + 1
           result = opposingPlayer.board.receiveAttack(move);
+          console.log(result, cache.ship, result.ship, 'up')
           if (cache.ship != result.ship) {
-            cache.horizontal.up = true
+            cache.vertical.up = true
             cache.factor = 1
           }
         } else if (!cache.vertical.down) {
           move = [cache.origin[0] + cache.factor, cache.origin[1]]
           cache.factor = cache.factor + 1
           result = opposingPlayer.board.receiveAttack(move);
+          console.log(result, cache.ship, result.ship, 'down')
           if (cache.ship != result.ship) {
-            cache.horizontal.down = true
+            cache.vertical.down = true
             cache.factor = 1
           }
         }
-
       } while (result.status === 'retry' )
 
     } else {
