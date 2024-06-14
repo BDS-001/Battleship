@@ -48,8 +48,8 @@ const gameBoard = () => {
   }
 
   const validAttack = (coordinates) => {
-    const row = location[0];
-    const col = location[1];
+    const row = coordinates[0];
+    const col = coordinates[1];
     
     if (row >= 10 || col >= 10 || row < 0 || col < 0) return false
     return true
@@ -116,6 +116,10 @@ const computer = (board) => {
         result = opposingPlayer.board.receiveAttack(move);
       } while (result.status === "retry");
 
+      if (result.hit) {
+        cache.origin = move
+        cache.ship = result.ship
+      }
       return { result, move };
     }
 
@@ -151,7 +155,7 @@ const computer = (board) => {
     let move;
 
     do {
-      move = cache.ship ? smartSelectMove() : selectMove();
+      move = selectMove();
       result = opposingPlayer.board.receiveAttack(move);
     } while (result.status === "retry");
 

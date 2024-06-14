@@ -180,13 +180,13 @@ describe('ship', () => {
         expect(move.length).toBe(2);
         expect(Number.isInteger(move[0])).toBe(true);
         expect(Number.isInteger(move[1])).toBe(true);
-        expect(result).not.toBe('retry');
+        expect(result.status).not.toBe('retry');
         expect(opposingPlayer.board.receiveAttack).toHaveBeenCalledWith(move);
       });
     
       test('should retry if the result is "retry"', () => {
         opposingPlayer.board.receiveAttack
-          .mockReturnValueOnce('retry')
+          .mockReturnValueOnce({status:'retry'})
           .mockReturnValueOnce('hit');
         
         const { result, move } = comp.playMove(opposingPlayer);
@@ -195,7 +195,7 @@ describe('ship', () => {
         expect(move.length).toBe(2);
         expect(Number.isInteger(move[0])).toBe(true);
         expect(Number.isInteger(move[1])).toBe(true);
-        expect(result).not.toBe('retry');
+        expect(result.status).not.toBe('retry');
         expect(opposingPlayer.board.receiveAttack).toHaveBeenCalledTimes(2);
       });
     });
