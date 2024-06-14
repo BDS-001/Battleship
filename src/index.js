@@ -81,17 +81,28 @@ const player = (playerName, cpu = null) => {
 
 const computer = (board) => {
   const previousMove = null;
+  let cache = {ship:null, coordinates:null, left:null, right:null, up:null, down:null, horizontal:null, vertical:null, hits:[]}
+
+  const resetCache = () => {
+    cache = {ship:null, coordinates:null, left:null, right:null, up:null, down:null, horizontal:null, vertical:null, hits:[]}
+  }
 
   const selectMove = () => {
     return [Math.floor(Math.random() * 10), Math.floor(Math.random() * 10)];
   };
+
+  function smartSelectMove() {
+    //if horizontal has been determined, go left until miss then go right untill hit
+    //if vertical has been determined, go left until miss then go right untill hit
+    //else check for direction using left, up, right, down
+  }
 
   const playMove = (opposingPlayer) => {
     let result;
     let move;
 
     do {
-      move = selectMove();
+      move = cache.ship ? smartSelectMove() : selectMove();
       result = opposingPlayer.board.receiveAttack(move);
     } while (result.status === "retry");
 
