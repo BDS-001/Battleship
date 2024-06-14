@@ -57,7 +57,8 @@ const gameState = (() => {
     };
 
     const handleAI = (computerPlayer, currentPlayer) => {
-        const { result, move } = computerPlayer.computer.playMove(currentPlayer);
+        // change between playMove and smartPlayMove
+        const { result, move } = computerPlayer.computer.smartPlayMove(currentPlayer);
         webpage.updateCell(currentPlayer, move, result);
 
         if (result.status === 'retry') {
