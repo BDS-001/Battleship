@@ -146,74 +146,63 @@ const computer = (board) => {
   function smartPlayMove(opposingPlayer) {
     let result;
     let move;
-
-    //no active hit
+  
+    function attackInDirection(direction, isHorizontal) {
+      do {
+        if (!cache[direction]) {
+          move = isHorizontal ? [cache.origin[0], cache.origin[1] + cache.factor * (direction === 'left' ? -1 : 1)] :
+                                [cache.origin[0] + cache.factor * (direction === 'up' ? -1 : 1), cache.origin[1]];
+          cache.factor += 1;
+          result = opposingPlayer.board.receiveAttack(move);
+          if (cache.ship !== result.ship) {
+            cache[direction] = true;
+            cache.factor = 1;
+          }
+        }
+      } while (result.status === 'retry');
+  
+      return { result, move };
+    }
+  
+    //if the cache is currently empty, randomly guess
     if (!cache.ship) {
       do {
         move = selectMove();
         result = opposingPlayer.board.receiveAttack(move);
       } while (result.status === "retry");
-
+  
       if (result.hit) {
-        cache.origin = move
-        cache.ship = result.ship
-        console.log(result, result.ship)
+        cache.origin = move;
+        cache.ship = result.ship;
+        console.log(result, result.ship);
       }
       return { result, move };
     }
-
+  
+    //if a ship has been hit and direction is determined, attack untill sunk
     if (cache.horizontal.active) {
-      //if horizontal has been determined, go left until miss then go right untill hit
-      do {
-        if (!cache.horizontal.left) {
-          move = [cache.origin[0], cache.origin[1] - cache.factor]
-          console.log(move)
-          cache.factor = cache.factor + 1
-          result = opposingPlayer.board.receiveAttack(move);
-          if (cache.ship != result.ship) {
-            cache.horizontal.left = true
-            cache.factor = 1
-          }
-        } else if (!cache.horizontal.right) {
-          move = [cache.origin[0], cache.origin[1] + cache.factor]
-          cache.factor = cache.factor + 1
-          result = opposingPlayer.board.receiveAttack(move);
-          if (cache.ship != result.ship) {
-            cache.horizontal.right = true
-            cache.factor = 1
-          }
-        }
-
-      } while (result.status === 'retry' )
-
-    } else if(cache.vertical.active) {
-      //if vertical has been determined, go left until miss then go right untill hit
-      do {
-        if (!cache.vertical.up) {
-          move = [cache.origin[0] - cache.factor, cache.origin[1]]
-          cache.factor = cache.factor + 1
-          result = opposingPlayer.board.receiveAttack(move);
-          if (cache.ship != result.ship) {
-            cache.horizontal.up = true
-            cache.factor = 1
-          }
-        } else if (!cache.vertical.down) {
-          move = [cache.origin[0] + cache.factor, cache.origin[1]]
-          cache.factor = cache.factor + 1
-          result = opposingPlayer.board.receiveAttack(move);
-          if (cache.ship != result.ship) {
-            cache.horizontal.down = true
-            cache.factor = 1
-          }
-        }
-
-      } while (result.status === 'retry' )
-
+      let res = attackInDirection('left', true);
+      result = res.result;
+      move = res.move;
+      if (cache.horizontal.left) {
+        res = attackInDirection('right', true);
+        result = res.result;
+        move = res.move;
+      }
+    } else if (cache.vertical.active) {
+      let res = attackInDirection('up', false);
+      result = res.result;
+      move = res.move;
+      if (cache.vertical.up) {
+        res = attackInDirection('down', false);
+        result = res.result;
+        move = res.move;
+      }
     } else {
-      // find ship direction
+      //if ship was attack but direction is unknown, find direction
       do {
         for (let i = 0; i < directions.length; i++) {
-          const direction = directions[i]
+          const direction = directions[i];
           if (!cache[direction.key]) {
             move = [cache.origin[0] + direction.move[0], cache.origin[1] + direction.move[1]];
             result = opposingPlayer.board.receiveAttack(move);
@@ -221,15 +210,16 @@ const computer = (board) => {
             if (result.status === 'success' && result.hit && cache.ship === result.ship) {
               cache[direction.cacheKey].active = true;
             }
-            break
+            break;
           }
         }
-      } while (result.status === 'retry' )
+      } while (result.status === 'retry');
     }
-
-    if (result.sunk) setCache()
+  
+    if (result.sunk) setCache();
     return { result, move };
   }
+  
 
 
 
