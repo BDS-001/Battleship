@@ -28,9 +28,11 @@ const gameState = (() => {
 
         disableListener(currentPlayer);
         // webpage.getPlayerBoard(currentPlayer).style.display = 'none'
+        webpage.getPlayerMiniMap(currentPlayer).style.display = 'grid'
         
         enableListener(currentOpponent);
         // webpage.getPlayerBoard(currentOpponent).style.display = 'grid'
+        webpage.getPlayerMiniMap(currentOpponent).style.display = 'none'
     };
 
     const checkWin = () => {
@@ -93,14 +95,17 @@ const gameState = (() => {
     const disableListener = (player) => webpage.getPlayerBoard(player).removeEventListener('click', cellSelect);
 
     function startGame() {
+        webpage.createMiniMap(player1)
+        webpage.createMiniMap(player2)
         webpage.removeOccupied()
-        webpage.getPlayerBoard(player2).style.display = 'grid'
+        webpage.getPlayerBoard(currentOpponent).style.display = 'grid'
+        webpage.getPlayerMiniMap(currentPlayer).style.display = 'grid'
         //********remove below******** */
         webpage.getPlayerBoard(player1).style.display = 'grid'
         //**************** */
         enableListener(player2)
         if (!player2.computer) webpage.generateOverlay()
-        webpage.createMiniMap(player1)
+
     }
 
     return { getPlayer, updatePlayer, getOpponent, getCurrentPlayer, initializePlayers, placeShips, startGame, enableListener, disableListener };

@@ -36,7 +36,7 @@ const webpage = (() => {
         console.log(player.board.board)
         const board = document.createElement('div');
         board.className = 'mini-map';
-        board.style.display = 'grid';
+        board.style.display = 'none';
         board.id = `${player.name}-mini-map`;
         board.style.gridTemplateColumns = 'repeat(10, 20px)';
         board.style.gridTemplateRows = 'repeat(10, 20px)';
@@ -53,7 +53,7 @@ const webpage = (() => {
             } else {
                 col++;
             }
-            
+
             cell.dataset.location = JSON.stringify(location);
             cell.dataset.index = i;
             cell.className = 'mini-map-cell';
@@ -64,6 +64,7 @@ const webpage = (() => {
     }
 
     const getPlayerBoard = (player) => document.querySelector(`#${player.name}`);
+    const getPlayerMiniMap = (player) => document.querySelector(`#${player.name}-mini-map`);
 
     const updateBoard = (player) => {
         let board = getPlayerBoard(player);
@@ -152,7 +153,7 @@ const webpage = (() => {
 
     const getBoards = () => document.querySelectorAll('.board');
 
-    return { createBoard, updateBoard, updateCell, getBoards, generateShipContainer, getPlayerBoard, removeOccupied, generateOverlay, createMiniMap };
+    return { createBoard, updateBoard, updateCell, getBoards, generateShipContainer, getPlayerBoard, removeOccupied, generateOverlay, createMiniMap, getPlayerMiniMap };
 })();
 
 module.exports = webpage;
