@@ -33,8 +33,9 @@ const webpage = (() => {
     };
 
     const createMiniMap = (player) => {
+        console.log(player.board.board)
         const board = document.createElement('div');
-        board.className = 'miniMap';
+        board.className = 'mini-map';
         board.style.display = 'grid';
         board.id = `${player.name}-mini-map`;
         board.style.gridTemplateColumns = 'repeat(10, 20px)';
@@ -45,13 +46,14 @@ const webpage = (() => {
         for (let i = 0; i < 100; i++) {
             const cell = document.createElement('div');
             const location = [row, col];
+            if (player.board.board[row][col].ship) cell.style.backgroundColor = 'grey'
             if (col >= 9) {
                 row++;
                 col = 0;
             } else {
                 col++;
             }
-
+            
             cell.dataset.location = JSON.stringify(location);
             cell.dataset.index = i;
             cell.className = 'mini-map-cell';
