@@ -33,31 +33,21 @@ const gameState = (() => {
         // webpage.getPlayerBoard(currentOpponent).style.display = 'grid'
     };
 
-    const checkWin = (player) => {
-        if (player.board.allShipsSunk()) {
+    const checkWin = () => {
+        if (currentOpponent.board.allShipsSunk()) {
             console.log('win');
-            disableListener(player);
+            disableListener(currentPlayer);
+            disableListener(currentOpponent);
             return true;
         }
         return false;
     };
 
     const updatePlayer = (player, location) => {
-        const res = player.board.receiveAttack(location);
-
-        if (res.status === 'retry') {
-            return res;
-        }
-
-        if (checkWin(player)) {
-            return res;
-        }
-
-        return res;
+        return player.board.receiveAttack(location);
     };
 
     const handleAI = (computerPlayer, currentPlayer) => {
-        // change between playMove and smartPlayMove
         const { result, move } = computerPlayer.computer.smartPlayMove(currentPlayer);
         webpage.updateCell(currentPlayer, move, result);
 
@@ -69,7 +59,7 @@ const gameState = (() => {
             alert(`${currentPlayer.name}'s ship has sunk`)
         }
 
-        if (checkWin(currentPlayer)) {
+        if (checkWin()) {
             return result;
         }
 
@@ -88,15 +78,13 @@ const gameState = (() => {
             const result = updatePlayer(getOpponent(), location);
             if (result.status != 'retry') {
                 event.target.style.backgroundColor = result.hit ? 'green' : 'red';
-            }
-            if (result.sunk) {
-                alert(`${currentOpponent.name}'s ship has sunk`)
-            }
-
-            if (currentOpponent.computer) {
-                handleAI(currentOpponent, currentPlayer);
-            } else {
-                changeTurn();
+                if (result.sunk) {
+                    alert(`${currentOpponent.name}'s ship has sunk`)
+                }
+    
+                if (!checkWin()) {
+                    currentOpponent.computer ? handleAI(currentOpponent, currentPlayer) : changeTurn();
+                }
             }
         }
     };
