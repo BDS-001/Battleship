@@ -23,15 +23,16 @@ const gameState = (() => {
     const getOpponent = () => currentOpponent;
 
     const changeTurn = () => {
+        webpage.activateOverlay()
         currentPlayer = currentPlayer === player1 ? player2 : player1;
         currentOpponent = currentOpponent === player1 ? player2 : player1;
 
         disableListener(currentPlayer);
-        // webpage.getPlayerBoard(currentPlayer).style.display = 'none'
+        webpage.getPlayerBoard(currentPlayer).style.display = 'none'
         webpage.getPlayerMiniMap(currentPlayer).style.display = 'grid'
         
         enableListener(currentOpponent);
-        // webpage.getPlayerBoard(currentOpponent).style.display = 'grid'
+        webpage.getPlayerBoard(currentOpponent).style.display = 'grid'
         webpage.getPlayerMiniMap(currentOpponent).style.display = 'none'
     };
 
@@ -100,9 +101,7 @@ const gameState = (() => {
         webpage.removeOccupied()
         webpage.getPlayerBoard(currentOpponent).style.display = 'grid'
         webpage.getPlayerMiniMap(currentPlayer).style.display = 'grid'
-        //********remove below******** */
-        webpage.getPlayerBoard(player1).style.display = 'grid'
-        //**************** */
+
         enableListener(player2)
         if (!player2.computer) webpage.generateOverlay()
 

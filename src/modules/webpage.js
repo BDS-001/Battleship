@@ -136,7 +136,7 @@ const webpage = (() => {
         // Create button element
         const button = document.createElement('button');
         button.id = 'reveal-button';
-        button.innerText = 'Reveal Webpage';
+        button.innerText = 'Reveal';
 
         // Add click event to remove overlay
         button.addEventListener('click', function() {
@@ -151,9 +151,13 @@ const webpage = (() => {
 
     }
 
+    const activateOverlay = () => {
+        document.querySelector('#overlay').style.display = 'flex'
+    }
+
     const getBoards = () => document.querySelectorAll('.board');
 
-    return { createBoard, updateBoard, updateCell, getBoards, generateShipContainer, getPlayerBoard, removeOccupied, generateOverlay, createMiniMap, getPlayerMiniMap };
+    return { createBoard, updateBoard, updateCell, getBoards, generateShipContainer, getPlayerBoard, removeOccupied, generateOverlay, createMiniMap, getPlayerMiniMap, activateOverlay };
 })();
 
 module.exports = webpage;

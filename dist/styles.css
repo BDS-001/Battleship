@@ -30,12 +30,6 @@ body {
   background-color: #355d69;
 }
 
-#ship-container {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
 .ship {
   width: 80px;
   height: 40px;
@@ -47,6 +41,13 @@ body {
   background-size: contain;
   background-position: center;
   background-repeat: no-repeat;
+}
+
+.ship-container {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  gap: 10px;
 }
 
 .horizontal {
