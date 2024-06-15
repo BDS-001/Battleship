@@ -1,3 +1,5 @@
+const { player } = require("..");
+
 const webpage = (() => {
     const createBoard = (player) => {
         const board = document.createElement('div');
@@ -12,9 +14,6 @@ const webpage = (() => {
         let col = 0;
         for (let i = 0; i < 100; i++) {
             const cell = document.createElement('div');
-            //**************** */
-            // cell.innerHTML = i
-            //*******************/
             const location = [row, col];
             if (col >= 9) {
                 row++;
@@ -30,6 +29,34 @@ const webpage = (() => {
         }
         document.body.append(board);
     };
+
+    const createMiniMap = (player) => {
+        const board = document.createElement('div');
+        board.className = 'miniMap';
+        board.style.display = 'none';
+        board.id = `${player.name}-mini-map`;
+        board.style.gridTemplateColumns = 'repeat(10, 10px)';
+        board.style.gridTemplateRows = 'repeat(10, 10px)';
+
+        let row = 0;
+        let col = 0;
+        for (let i = 0; i < 100; i++) {
+            const cell = document.createElement('div');
+            const location = [row, col];
+            if (col >= 9) {
+                row++;
+                col = 0;
+            } else {
+                col++;
+            }
+            cell.dataset.location = JSON.stringify(location);
+            cell.dataset.index = i;
+            cell.className = 'mini-map-cell';
+            cell.style.border = '1px solid #b9d4b4';
+            board.appendChild(cell);
+        }
+        document.body.append(board);
+    }
 
     const getPlayerBoard = (player) => document.querySelector(`#${player.name}`);
 
