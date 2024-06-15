@@ -1,13 +1,15 @@
 const { player } = require("..");
 
 const webpage = (() => {
+    const cellSize = 45
+
     const createBoard = (player) => {
         const board = document.createElement('div');
         board.className = 'board';
         board.style.display = 'none';
         board.id = player.name;
-        board.style.gridTemplateColumns = 'repeat(10, 40px)';
-        board.style.gridTemplateRows = 'repeat(10, 40px)';
+        board.style.gridTemplateColumns = `repeat(10, ${cellSize}px)`;
+        board.style.gridTemplateRows = `repeat(10, ${cellSize}px)`;
         board.dataset.setupComplete = 'false';
 
         let row = 0;
@@ -33,10 +35,10 @@ const webpage = (() => {
     const createMiniMap = (player) => {
         const board = document.createElement('div');
         board.className = 'miniMap';
-        board.style.display = 'none';
+        board.style.display = 'grid';
         board.id = `${player.name}-mini-map`;
-        board.style.gridTemplateColumns = 'repeat(10, 10px)';
-        board.style.gridTemplateRows = 'repeat(10, 10px)';
+        board.style.gridTemplateColumns = 'repeat(10, 20px)';
+        board.style.gridTemplateRows = 'repeat(10, 20px)';
 
         let row = 0;
         let col = 0;
@@ -49,6 +51,7 @@ const webpage = (() => {
             } else {
                 col++;
             }
+
             cell.dataset.location = JSON.stringify(location);
             cell.dataset.index = i;
             cell.className = 'mini-map-cell';
@@ -103,7 +106,7 @@ const webpage = (() => {
             shipDiv.setAttribute('data-placed', 'false');
             shipDiv.setAttribute('data-origin', 'none');
             shipDiv.setAttribute('data-direction', 'horizontal');
-            shipDiv.style.width = `${ship.length * 40}px`;
+            shipDiv.style.width = `${ship.length * cellSize}px`;
             shipContainer.appendChild(shipDiv);
         });
 
@@ -147,7 +150,7 @@ const webpage = (() => {
 
     const getBoards = () => document.querySelectorAll('.board');
 
-    return { createBoard, updateBoard, updateCell, getBoards, generateShipContainer, getPlayerBoard, removeOccupied, generateOverlay };
+    return { createBoard, updateBoard, updateCell, getBoards, generateShipContainer, getPlayerBoard, removeOccupied, generateOverlay, createMiniMap };
 })();
 
 module.exports = webpage;

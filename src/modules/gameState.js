@@ -100,6 +100,7 @@ const gameState = (() => {
         //**************** */
         enableListener(player2)
         if (!player2.computer) webpage.generateOverlay()
+        webpage.createMiniMap(player1)
     }
 
     return { getPlayer, updatePlayer, getOpponent, getCurrentPlayer, initializePlayers, placeShips, startGame, enableListener, disableListener };
