@@ -213,7 +213,7 @@ const shipPlacementHandler = (() => {
     }
 
     function getIncompleteBoard() {
-        const boards = document.querySelectorAll('.board');
+        const boards = webpage.getBoards()
         const firstIncompleteBoard = Array.from(boards).find((board) => board.dataset.setupComplete === 'false');
         if (firstIncompleteBoard) activePlayer = gameState.getPlayer(firstIncompleteBoard.id);
         return firstIncompleteBoard;
@@ -229,6 +229,7 @@ const shipPlacementHandler = (() => {
             setupPlaceShips();
         } else {
             firstIncompleteBoard.style.display = 'grid';
+            webpage.updateHeader(player.name)
             webpage.generateShipContainer();
             setupPlacements();
             enableLockIn(firstIncompleteBoard);

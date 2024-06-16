@@ -9,6 +9,7 @@ const start = () => {
 
 const setMode = (mode) => {
     gameState.initializePlayers(mode);
+    webpage.genHeader()
     webpage.createBoard(gameState.getPlayer('player1'));
     webpage.createBoard(gameState.getPlayer('player2'));
     shipPlacementHandler.setupPlaceShips();

@@ -151,13 +151,23 @@ const webpage = (() => {
 
     }
 
+    const genHeader = () => {
+        const header = document.createElement('h1')
+        header.id = 'player-header'
+        document.body.prepend(header)
+    }
+
+    const updateHeader = (content) => {
+        document.querySelector('#player-header').innerHTML = content
+    }
+
     const activateOverlay = () => {
         document.querySelector('#overlay').style.display = 'flex'
     }
 
     const getBoards = () => document.querySelectorAll('.board');
 
-    return { createBoard, updateBoard, updateCell, getBoards, generateShipContainer, getPlayerBoard, removeOccupied, generateOverlay, createMiniMap, getPlayerMiniMap, activateOverlay };
+    return { genHeader, updateHeader, createBoard, updateBoard, updateCell, getBoards, generateShipContainer, getPlayerBoard, removeOccupied, generateOverlay, createMiniMap, getPlayerMiniMap, activateOverlay };
 })();
 
 module.exports = webpage;
