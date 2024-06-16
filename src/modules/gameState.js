@@ -26,6 +26,7 @@ const gameState = (() => {
         webpage.activateOverlay()
         currentPlayer = currentPlayer === player1 ? player2 : player1;
         currentOpponent = currentOpponent === player1 ? player2 : player1;
+        webpage.updateHeader(currentPlayer.name)
 
         disableListener(currentPlayer);
         webpage.getPlayerBoard(currentPlayer).style.display = 'none'
@@ -41,6 +42,7 @@ const gameState = (() => {
             console.log('win');
             disableListener(currentPlayer);
             disableListener(currentOpponent);
+            webpage.createVictoryScreen(currentPlayer.name)
             return true;
         }
         return false;
@@ -101,6 +103,7 @@ const gameState = (() => {
         webpage.removeOccupied()
         webpage.getPlayerBoard(currentOpponent).style.display = 'grid'
         webpage.getPlayerMiniMap(currentPlayer).style.display = 'grid'
+        webpage.updateHeader(currentPlayer.name)
 
         enableListener(player2)
         if (!player2.computer) webpage.generateOverlay()

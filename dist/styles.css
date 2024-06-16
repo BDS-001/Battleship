@@ -183,3 +183,46 @@ body {
   top: 10px;
   left: 10px  ;
 }
+
+#player-header {
+  color: white;
+}
+
+#victoryScreen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  z-index: 1000;
+  color: #ffffff;
+  text-align: center;
+  font-family: Arial, sans-serif;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.victoryMessage {
+  font-size: 3rem;
+  margin-bottom: 20px;
+}
+
+.playAgainButton {
+  padding: 10px 20px;
+  font-size: 1.5rem;
+  background-color: #4CAF50;
+  color: #ffffff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.playAgainButton:hover {
+  background-color: #45a049;
+}

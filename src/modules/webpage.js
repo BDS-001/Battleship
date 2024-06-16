@@ -167,7 +167,33 @@ const webpage = (() => {
 
     const getBoards = () => document.querySelectorAll('.board');
 
-    return { genHeader, updateHeader, createBoard, updateBoard, updateCell, getBoards, generateShipContainer, getPlayerBoard, removeOccupied, generateOverlay, createMiniMap, getPlayerMiniMap, activateOverlay };
+    function createVictoryScreen(winnerName) {
+        // Create a container for the victory screen
+        const victoryScreen = document.createElement('div');
+        victoryScreen.id = 'victoryScreen';
+    
+        // Create a message element
+        const victoryMessage = document.createElement('h1');
+        victoryMessage.textContent = `${winnerName} Wins!`;
+        victoryMessage.classList.add('victoryMessage');
+    
+        // Create a play again button
+        const playAgainButton = document.createElement('button');
+        playAgainButton.textContent = 'Play Again';
+        playAgainButton.classList.add('playAgainButton');
+        playAgainButton.addEventListener('click', function() {
+            location.reload();
+        });
+    
+        // Append elements to the victory screen
+        victoryScreen.appendChild(victoryMessage);
+        victoryScreen.appendChild(playAgainButton);
+    
+        // Append the victory screen to the body
+        document.body.appendChild(victoryScreen);
+    }
+
+    return { createVictoryScreen, genHeader, updateHeader, createBoard, updateBoard, updateCell, getBoards, generateShipContainer, getPlayerBoard, removeOccupied, generateOverlay, createMiniMap, getPlayerMiniMap, activateOverlay };
 })();
 
 module.exports = webpage;
