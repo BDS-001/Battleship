@@ -77,8 +77,10 @@ const webpage = (() => {
     }
 
     const updateCell = (player, move, result) => {
-        const target = getPlayerBoard(player).querySelector(`.grid-cell[data-location='${JSON.stringify(move)}']`);
-        target.style.backgroundColor = result.hit ? 'green' : 'red';
+        const board = getPlayerBoard(player).querySelector(`.grid-cell[data-location='${JSON.stringify(move)}']`);
+        board.style.backgroundColor = result.hit ? 'green' : 'red';
+        const miniMap = getPlayerMiniMap(player).querySelector(`.mini-map-cell[data-location='${JSON.stringify(move)}']`);
+        miniMap.style.backgroundColor = result.hit ? 'green' : 'red';
     };
 
     const generateShips = (shipContainer) => {

@@ -82,7 +82,7 @@ const gameState = (() => {
             const location = JSON.parse(event.target.dataset.location);
             const result = updatePlayer(getOpponent(), location);
             if (result.status != 'retry') {
-                event.target.style.backgroundColor = result.hit ? 'green' : 'red';
+                webpage.updateCell(currentOpponent, location, result)
                 if (result.sunk) {
                     alert(`${currentOpponent.name}'s ship has sunk`)
                 }
