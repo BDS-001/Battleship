@@ -66,16 +66,6 @@ const webpage = (() => {
     const getPlayerBoard = (player) => document.querySelector(`#${player.name}`);
     const getPlayerMiniMap = (player) => document.querySelector(`#${player.name}-mini-map`);
 
-    const updateBoard = (player) => {
-        let board = getPlayerBoard(player);
-        board = board.querySelectorAll('.grid-cell');
-        for (let row = 0; row <= 9; row++) {
-            for (let col = 0; col <= 9; col++) {
-                if (player.board.board[row][col].ship) board[(row * 10) + col].innerHTML = 's';
-            }
-        }
-    };
-
     const removeOccupied = () => {
         const boards = document.querySelectorAll('.board')
         boards.forEach(board => {
@@ -193,7 +183,7 @@ const webpage = (() => {
         document.body.appendChild(victoryScreen);
     }
 
-    return { createVictoryScreen, genHeader, updateHeader, createBoard, updateBoard, updateCell, getBoards, generateShipContainer, getPlayerBoard, removeOccupied, generateOverlay, createMiniMap, getPlayerMiniMap, activateOverlay };
+    return { createVictoryScreen, genHeader, updateHeader, createBoard, updateCell, getBoards, generateShipContainer, getPlayerBoard, removeOccupied, generateOverlay, createMiniMap, getPlayerMiniMap, activateOverlay };
 })();
 
 module.exports = webpage;
